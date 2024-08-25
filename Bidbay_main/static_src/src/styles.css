@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities{
+
+    /* style for login page */
+
+    .login_input {
+        @apply  bg-[#d9d9d9] w-[100%] h-[2.5rem] rounded-[10px] box-border mt-[0.5rem] pl-[10px] border-none outline-none focus:outline-none;
+    }
+    .login_label{
+        @apply text-grey-dark ;
+    }
+
+    .login_container_style{
+        @apply flex flex-col items-center relative box-border rounded-[20px] pt-[4rem] overflow-hidden  my-[3rem] h-[70vh] min-h-[50rem] w-[33vw] 
+        shadow-[5px_0px_10px_5px_rgba(190,190,190),_0px_5px_10px_5px_rgba(190,190,190),_0px_-5px_10px_5px_rgba(190,190,190),_-5px_0px_10px_5px_rgba(190,190,190)];
+    }
+    .login_button{
+        @apply bg-blue m-auto mt-[10%] w-[30%] h-[2.5rem] rounded-[10px] text-white text-[125%] hover:scale-[1.05] hover:transition-[2000ms] hover:shadow-md;
+    }
+
+    .register_container_style{
+        @apply flex flex-col items-center relative box-border rounded-[20px] py-[2rem] overflow-hidden  my-[3rem]  min-h-[53rem] w-[33vw] 
+        shadow-[5px_0px_10px_5px_rgba(190,190,190),_0px_5px_10px_5px_rgba(190,190,190),_0px_-5px_10px_5px_rgba(190,190,190),_-5px_0px_10px_5px_rgba(190,190,190)];
+    }
+
+    .register_button{
+        @apply bg-blue m-auto mt-[3%] w-[30%] h-[2.5rem] rounded-[10px] text-white text-[125%] hover:scale-[1.05] hover:transition-[2000ms] hover:shadow-md;
+    }
+
+    .Bidbay_image{
+        @apply w-[100%] brightness-[0.4] z-[-1] min-h-[20rem] ;
+    }
+
+    .edit_info_container{
+        @apply bg-white flex flex-col items-center relative box-border rounded-[20px] my-[2rem] py-[2rem] overflow-hidden  mt-[4rem]   w-[33vw] m-auto;
+    }
+
+    .save_changes_button{
+        @apply bg-blue m-auto mt-[3%] w-[30%] h-[2.5rem] rounded-[10px] text-white text-[125%] hover:scale-[1.05] hover:transition-[2000ms] hover:shadow-md;
+    }
+
+}

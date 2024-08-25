@@ -1,0 +1,469 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {%tailwind_css%}
+</head>
+
+<body class="relative font-roboto bg-blue tracking-[.02em]">
+    {% csrf_token %}
+    <!-- nav bar -->
+    {%load static%}
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%] justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+    <br>
+
+    <!-- nav bar ends -->
+
+    <!-- -------------------------------------------------------------- -->
+
+    <!-- image div -->
+
+    <div class="relative w-[100%] flex items-center justify-center">
+
+        <img src="{%static 'Bidbay1/background image.jpg' %}" alt="" class="Bidbay_image">
+
+        <div class="flex flex-col absolute  justify-center min-w-[20rem]  w-[35%]">
+            <p class="shrink justify-center text-white text-[4em] text-center box-border font-semibold">
+                BIDBAY</p>
+            <p class="flex-shrink text-white text-[1.5em] text-center mt-[0.25rem] font-semibold">Your gateway to
+                awesome deals</p>
+            <form method="POST" action="{%url 'Bidbay1:search_functionality'%}" enctype="multipart/form-data">
+                {%csrf_token%}
+                <input type="text" placeholder="Search For Items" name="search_box"
+                    class="w-[100%] h-[2.5rem] rounded-[20px] mt-[2rem] box-border px-[20px] focus:outline-none z-[1]">
+            </form>
+        </div>
+    </div>
+    <!-- image div ends here -->
+
+    <!-- -------------------------------------------------------------- -->
+
+    <!-- items and category div -->
+
+    <!--Category div  -->
+
+    <div class="flex items-start start-0 mt-[2rem] ">
+        <div id="category pary" class=" bg-grey w-[14rem]  p-[2rem]  box-border rounded-r-[20px]">
+            <h1 class="text-[18px] font-medium">Categories</h1>
+            <ul class="mt-[1rem] space-y-[1.25rem]">
+                {%for item in item_category%}
+                    <form action="{%url 'Bidbay1:get_item_details_for_item_list_page'%}" method="POST" enctype="multipart/form-data">
+                        {%csrf_token%}
+                        <input type="hidden" name='category_name' value="{{item}}">
+                        <button type="submit">
+                            {{item}}
+                        </button>
+                    </form>
+                {%endfor%}
+            </ul>
+        </div>
+
+        <!-- category div ends here -->
+
+        <!-- -------------------------------------------------------------- -->
+
+        <!-- Items div -->
+
+        <div class=" mx-[2rem] w-[80%] box-border z-0  px-[2rem] ">
+            {%if newdeals_item_details%}
+                <div class="p-[2rem] bg-blue-dark rounded-[20px]">
+
+                    <p class="text-white text-[2.5rem] font-medium">New deals</p>
+
+                    <div id="carousel-view" class="flex relative w-[100%]  items-center pt-[2rem]">
+                        {%load static%}
+                        <div class="relative z-10">
+                            <button id="prev-btn1" onclick="goprev1()"
+                                class="relative  p-[.5rem] h-[17rem] min-w-[3rem] opacity-0 hover:opacity-[.75] hover:duration-700">
+                                <img src="{%static 'Bidbay1/system_images/left arrow.png'%}" alt="left arrow">
+                            </button>
+                        </div>
+
+                        <div class="relative justify-between h-[18rem]  w-[60rem] items-center z-[0] overflow-hidden">
+                            {% for item in newdeals_item_details %}
+                                <form method="POST" action="{%url 'Bidbay1:Bidbay_itemdetails'%}" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <input type="text" name="this_item_id" class="hidden" value="{{item.0}}">
+                                    <button id="item1" type="submit"
+                                        class="absolute bg-[#d9d9d9] overflow-hidden border-[5px] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] text-left duration-[1s] z-10">
+
+                                        <img src={{item.4}} alt=""
+                                            class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] z-0">
+                                        <p id="item_name" class="font-semibold mt-[.35rem]">{{item.1}}</p>
+                                        <p id="item_time_left" class="text-[13px]">{{item.3}}d {{item.5}}hr</p>
+                                        <p id="current_bid" class="font-medium">Rs.{{item.2}}</p>
+                                    </button>
+                                </form>
+                            {%endfor%}
+
+                            
+                        </div>
+
+                        <div class="relative z-10">
+                            <button id="next-btn1" onclick="gonext1()"
+                                class=" relative min-w-[3rem] h-[18rem] p-[.5rem] opacity-0 hover:opacity-[.75] hover:duration-700">
+                                <img src="{%static 'Bidbay1/system_images/right arrow.png'%}" alt="right arrow">
+                            </button>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            {%endif%}
+            {% if endingsoon_item_details%}
+
+                <div class="p-[2rem] mt-[2rem] bg-blue-dark w-[100%] rounded-[20px]">
+
+                    <p class="text-white text-[2.5rem] font-medium">Ending Soon</p>
+
+                    <div id="carousel-view" class="flex relative w-[100%] items-center pt-[2rem]">
+
+                        <div class="relative z-10">
+                            <button id="prev-btn2" onclick="goprev2()"
+                                class="relative  p-[.5rem] h-[17rem] min-w-[3rem] opacity-0 hover:opacity-[.75] hover:duration-700">
+                                <img src="{%static 'Bidbay1/system_images/left arrow.png'%}" alt="left arrow">
+                            </button>
+                        </div>
+
+                        <div class="relative justify-between h-[18rem] w-[60rem] items-center z-[0] overflow-hidden">
+                            {% for items in endingsoon_item_details %}
+                                <form  method="POST" action="{%url 'Bidbay1:Bidbay_itemdetails'%}" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                                    <button id="item2" type="submit"
+                                        class="absolute bg-[#d9d9d9] overflow-hidden border-[5px] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] text-left duration-[1s] z-10">
+                                        <img src={{items.4}} alt=""
+                                            class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] z-0">
+                                        <p id="item_name" class="font-semibold mt-[.35rem]">{{items.1}}</p>
+                                        <p id="item_time_left" class="text-[13px]">{{items.3}}d {{items.5}}hr</p>
+                                        <p id="current_bid" class="font-medium">Rs.{{items.2}}</p>
+                                    </button>
+                                </form>
+                            {%endfor%}
+
+                        </div>
+
+                        <div class="relative z-10">
+                            <button id="next-btn2" onclick="gonext2()"
+                                class=" relative min-w-[3rem] h-[18rem] p-[.5rem] opacity-0 hover:opacity-[.75] hover:duration-700">
+                                <img src="{%static 'Bidbay1/system_images/right arrow.png'%}" alt="right arrow">
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            {%endif%}
+            {% if livebid_details%}
+                <div class="p-[2rem] mt-[2rem] bg-blue-dark w-[100%] rounded-[20px]">
+
+                    <p class="text-white text-[2.5rem] font-medium">Live Bids</p>
+
+                    <div id="carousel-view" class="flex relative w-[100%] items-center pt-[2rem]">
+
+                        <div class="relative z-10">
+                            <button id="prev-btn2" onclick="goprev3()"
+                                class="relative  p-[.5rem] h-[17rem] min-w-[3rem] opacity-0 hover:opacity-[.75] hover:duration-700">
+                                <img src="{%static 'Bidbay1/system_images/left arrow.png'%}" alt="left arrow">
+                            </button>
+                        </div>
+
+                        <div class="relative justify-between h-[18rem] w-[60rem] items-center z-[0] overflow-hidden">
+                            {% for item in livebid_details %}
+                                <form action="{%url 'Bidbay1:Bidbay_liveauction' room_name=item.1.0 user_name=userindicator%}" method="POST" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <input type="hidden" value="{{item.1.0}}" name="live_item_id">
+                                    <button id="item3" type="submit"
+                                        class="absolute bg-[#d9d9d9] text-left overflow-hidden border-[5px] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] z-10">
+                                        <img src="{{item.1.3}}" alt=""
+                                            class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] z-0">
+                                        <p id="item_name" class="font-semibold mt-[.35rem]">{{item.1.1}}</p>
+                                        <div id="countdown" class="text-[12px] flex">
+                                            <input type="hidden" value="{{item.0.0}}" id="countdown11">
+                                            <p id="countdown1">
+                                                {{ item.0.0 | stringformat:"02d" }}
+                                            </p> 
+                                            : 
+                                            <input type="hidden" value="{{item.0.1}}" id="countdown12">
+                                            <p id="countdown2">
+                                                {{ item.0.1 | stringformat:"02d" }} 
+                                            </p>
+                                            : 
+                                            <input type="hidden" id="countdown13" value="{{item.0.2}}"> 
+                                            <p id="countdown3"> 
+                                                {{ item.0.2 | stringformat:"02d" }}
+                                            </p>
+                                        
+                                        </div>
+                                        <p id="current_bid" class="font-medium">Rs.{{item.1.2}}</p>
+                                    </button>
+                                </form>
+                            {%endfor%}
+                        </div>
+
+                        <div class="relative z-10">
+                            <button id="next-btn2" onclick="gonext3()"
+                                class=" relative min-w-[3rem] h-[18rem] p-[.5rem] opacity-0 hover:opacity-[.75] hover:duration-700">
+                                <img src="{%static 'Bidbay1/system_images/right arrow.png'%}" alt="right arrow">
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            {%endif%}
+
+        </div>
+
+        <!-- Items div ends here -->
+
+    </div>
+
+    <!-- Items and category div ends here -->
+
+    <!-- ------------------------------------------------------------------------------------------- -->
+
+    <!-- footer div starts here -->
+
+    <div class="flex flex-wrap bg-footer-color w-[100%] justify-between mt-[2rem] pt-[3rem]">
+
+        <div class=" p-[2rem] mt-[2rem] ">
+            <p class="text-blue text-5xl"><b>BIDBAY</b></p>
+            <p class=" mt-[.5rem]  text-white text-2xl"><b>Since 2000's</b></p>
+        </div>
+
+        <div class="p-[2rem] mt-[2rem]">
+            <p class="text-2xl text-blue"> <b>Contact us</b></p>
+            <p class="mt-[.5rem]  text-white text-1xl"><b>+91 9876543210</b></p>
+            <p class="mt-[.5rem] text-white text-1xl"><b>+91 9834565432</b></p>
+        </div>
+
+        <div class="p-[2rem] mt-[2rem]">
+            <p class="text-2xl text-blue"> <b>Company</b></p>
+            <p class="mt-[.5rem]  text-white text-1xl"><b>About Us</b></p>
+            <p class="mt-[.5rem] text-white text-1xl"><b>Sustainability</b></p>
+            <p class="mt-[.5rem] text-white text-1xl"><b>Terms of Service</b></p>
+            <p class="mt-[.5rem] text-white text-1xl"><b>Privacy</b></p>
+        </div>
+
+        <div class="p-[2rem] mt-[2rem]">
+            <p class="text-2xl text-blue"> <b>Resources</b></p>
+            <p class="mt-[.5rem]  text-white text-1xl"><b>Developer API</b></p>
+            <p class="mt-[.5rem] text-white text-1xl"><b>Tools</b></p>
+            <p class="mt-[.5rem] text-white text-1xl"><b>Blog</b></p>
+        </div>
+
+        <div class="p-[2rem] mt-[2rem]">
+            <p class="text-[16px] font-semibold text-blue">Subscribe Us:</p>
+            <div class="flex mt-[.5rem]">
+                <input type="email" name="" id="" placeholder="Enter email"
+                    class="rounded-[5px] px-[10px] w-[100%] placeholder:text-[12px]">
+                <button
+                    class="ml-[.25rem] bg-blue text-white p-[5px] font-medium rounded-[5px] hover:shadow-inner hover:shadow-black">Subscribe</button>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <!-- Footer div ends here -->
+
+
+
+    <script>
+        const slides1 = document.querySelectorAll("#item1");
+    
+        var counter1 = 0;
+        slides1.forEach(
+            (item1, index) => {
+                
+                item1.style.left = `${((index * 11) + index) + .5}rem`;
+            }
+        )
+        const goprev1 = () => {
+            if (counter1 == 0) {
+                return;
+            } else {
+                counter1--;
+                slideImage1();
+            }
+        }
+        const gonext1 = () => {
+            if ((slides1.length <=5) || ((counter1) >= ((slides1.length)-5))) {
+                return;
+            } else {
+                counter1++;
+                slideImage1();
+            }
+        }
+        const slideImage1 = () => {
+            slides1.forEach(
+                (item1, index) => {
+                    item1.style.transform = `translateX(-${((counter1 * 11) + counter1)}rem)`;
+                }
+            )
+        }
+
+
+        const slides2 = document.querySelectorAll("#item2");
+        var counter2 = 0;
+        slides2.forEach(
+            (item2, index) => {
+                item2.style.left = `${((index * 11) + index) + .5}rem`;
+            }
+        )
+        const goprev2 = () => {
+            if (counter2 == 0) {
+                return;
+            } else {
+                counter2--;
+                slideImage2();
+            }
+        }
+        const gonext2 = () => {
+            if ( (slides2.length <= 5)  || ((counter2) >= ((slides2.length)-5))) {
+                return;
+            } else {
+                counter2++;
+                slideImage2();
+            }
+
+        }
+        const slideImage2 = () => {
+            slides2.forEach(
+                (item2, index) => {
+                    item2.style.transform = `translateX(-${((counter2 * 11) + counter2)}rem)`;
+                }
+            )
+        }
+
+        const slides3 = document.querySelectorAll("#item3");
+        var counter3 = 0;
+        slides3.forEach(
+            (item3, index) => {
+                item3.style.left = `${((index * 11) + index) + .5}rem`;
+            }
+        )
+        const goprev3 = () => {
+            if (counter3 == 0) {
+                return;
+            } else {
+                counter3--;
+                slideImage3();
+            }
+        }
+        const gonext3 = () => {
+            if ( (slides3.length <= 5)  || ((counter3) >= ((slides3.length)-5))) {
+                return;
+            } else {
+                counter3++;
+                slideImage3();
+            }
+
+        }
+        const slideImage3 = () => {
+            slides3.forEach(
+                (item3, index) => {
+                    item3.style.transform = `translateX(-${((counter3 * 11) + counter3)}rem)`;
+                }
+            )
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            function updateTimer() {
+                const hoursElements = document.querySelectorAll("#countdown11");
+                const minutesElements = document.querySelectorAll("#countdown12");
+                const secondsElements = document.querySelectorAll("#countdown13");
+
+                const hourfields = document.querySelectorAll("#countdown1");
+                const minutefields = document.querySelectorAll("#countdown2");
+                const secondfields = document.querySelectorAll("#countdown3");
+
+
+                // Loop through the elements and update their text content
+                for (let i = 0; i < hoursElements.length; i++) {
+                    let hours = parseInt(hoursElements[i].value);
+                    let minutes = parseInt(minutesElements[i].value);
+                    let seconds = parseInt(secondsElements[i].value);
+
+
+                    if (seconds > 0) {
+                        seconds--;
+                    } else {
+                        if (minutes > 0) {
+                            minutes--;
+                            seconds = 59;
+                        } else {
+                            if (hours > 0) {
+                                hours--;
+                                minutes = 59;
+                                seconds = 59;
+                            } else {
+                                // Timer has reached zero, you can handle this case as needed
+                            }
+                        }
+                    }
+
+                    hoursElements[i].value = (hours < 10 ? '0' : '') + hours;
+                    minutesElements[i].value = (minutes < 10 ? '0' : '') + minutes;
+                    secondsElements[i].value = (seconds < 10 ? '0' : '') + seconds;
+
+                    hourfields[i].innerHTML= hoursElements[i].value;
+                    minutefields[i].innerHTML = minutesElements[i].value;
+                    secondfields[i].innerHTML = secondsElements[i].value;
+
+                }
+            }
+
+            setInterval(updateTimer, 1000); 
+        });
+    
+        
+        
+    </script>
+
+ 
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        
+        {%tailwind_css%}
+    </head>
+    <body class="flex flex-row justify-center font-roboto tracking-[0.02em]">
+        <div class="register_container_style">
+            <div class="w-[85%]">
+                <h1 class="text-4xl text-grey-dark"> <b> Register </b></h1>
+                <form id="form" class="flex flex-col  items-left mt-[2.5rem] w-[100%] text-grey-dark" method='POST' action="{%url 'Bidbay1:store_username_and_encryptedpwd'%}" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="flex grow flex-wrap gap-[1rem] ">
+                        <div class="w-[47%] grow min-w-[10rem]">
+                            <label for="firstname" >First Name : </label><br>
+                            <input  name="fname" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                        </div>
+                        <div class="w-[47%] grow min-w-[10rem]">
+                            <label for="lastname" >Last Name : </label><br>
+                            <input  name="lname" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                        </div>
+                    </div>
+                    
+                    <label for="Email" class="mt-[1rem]">Email Address : </label>
+                    <input   name="email" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="email">
+                    
+                    
+
+                    <label  for="Username" class="mt-[1rem]">Username : </label>
+                    <input  name="username" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+
+                    <label  for="Password" class="mt-[1rem]">Password : </label>
+                    <input name="password" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="Password">
+
+                    <div class="flex flex-wrap justify-between mt-[1rem] gap-[1rem] ">
+                        <div class="w-[47%] grow min-w-[10rem]">
+                            <label for="DOB" >DOB : </label><br>
+                            <input  name="DOB" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] pr-[10px] mt-[0.5rem]  text-black focus:outline-none" type="date">
+                        </div>
+                        <div class="w-[47%] grow min-w-[10rem]">
+                            <label for="number" >Phone : </label><br>
+                            <input  name="phone" minlength="10" maxlength="10" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] pr-[10px] mt-[0.5rem]  text-black focus:outline-none" type="number">
+                        </div>
+                    </div>
+
+                    <label  for="address"class="mt-[1rem]">Address : </label>
+                    <input  id="address" name="address" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+
+                    <label for="image"class="mt-[1rem]">Profile Image : </label>
+                    <input type="file" id='image' required name="image" class="bg-grey border-none rounded-[7px]  w-[100%] box-border p-[5px] mt-[0.5rem] text-black focus:outline-none">
+                    
+                    <p class="text-center text-sm mt-2 text-invalid-red" id="Invalid_part"></p>
+
+                    <br><button id="button" class="register_button" type="submit"><b>Register</b></button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            
+            document.getElementById('form').addEventListener('submit', function(event){
+                var firstname = document.getElementById("firstname").value;
+                var lastname = document.getElementById("lastname").value;
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var username = document.getElementById("username").value;
+                var DOB = document.getElementById("DOB").value;
+                var number = document.getElementById("number").value;
+                var address = document.getElementById("address").value;
+
+                if(firstname === '' || lastname === '' || email === '' || password === '' || username === '' || DOB === '' || number === '' || address === '' ){
+                    document.getElementById("Invalid_part").innerHTML = "Please fill up all the fields!";
+                    event.preventDefault();
+                }
+                else{
+                    document.getElementById("Invalid_part").innerHTML = "";
+                }
+            
+            });
+        </script>
+    </body>
+</html>

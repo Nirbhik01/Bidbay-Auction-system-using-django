@@ -1,0 +1,93 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Edit Info</title>
+        
+        {%tailwind_css%}
+    </head>
+    <body class='bg-blue tracking-[.02em]'> 
+        {% comment %} body ko class === class="flex flex-row justify-center font-roboto tracking-[0.02em]" {% endcomment %}
+        {%load static%}
+        <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+            <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+                <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                    <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+                </div>
+
+                <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                    <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                            href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                    <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                            href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                            Upload Items </a></li>
+                </div>
+
+            </div>
+
+            <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+                <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                    {%csrf_token%}
+                    <input type="text" placeholder="Search" name="search_box"
+                        class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+                </form>
+                <div class="w-[20%]">
+
+                    <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                        {%csrf_token%}
+                        <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                        <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                            src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+    
+        <div class="edit_info_container">
+            <div class="w-[85%]">
+                <h1 class="text-3xl text-grey-dark"> <b> Edit Profile Information </b></h1>
+                <form id="form" class="flex flex-col  items-left mt-[2.5rem] w-[100%] text-grey-dark" method='POST' action="{%url 'Bidbay1:save_changes_to_profile_details'%}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- <div class="flex grow flex-wrap gap-[1rem] ">
+                        <div class="w-[47%] grow min-w-[10rem]">
+                            <label for="firstname" >First Name : </label><br>
+                            <input name="fname" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none " placeholder="{{user_info.0}}" type="text">
+                        </div>
+                        <div class="w-[47%] grow min-w-[10rem]">
+                            <label for="lastname" >Last Name : </label><br>
+                            <input placeholder="{{user_info.1}}" name="lname" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                        </div>
+                    </div> -->
+                
+                    <label  for="Username" class="mt-[1rem]">Username : </label>
+                    <input placeholder="{{user_info.3}}" name="username" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                    
+                    <label for="Email" class="mt-[1rem]">Email Address : </label>
+                    <input placeholder="{{user_info.2}}" name="email" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="email">
+
+                    <label for="number" class="mt-[1rem]">Phone : </label>
+                    <input placeholder="{{user_info.4}}" name="phone" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="number">
+
+                    <label  for="address"class="mt-[1rem]">Address : </label>
+                    <input placeholder="{{user_info.5}}" id="address" name="address" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+
+                    <label  for="profileimage"class="mt-[1rem]">New Profile Image : </label>
+                    <input type="file" name="profileimage" class="bg-grey border-none rounded-[7px]  w-[100%] box-border p-[5px] mt-[0.5rem] text-black focus:outline-none">
+
+                    <br><button id="button" class="save_changes_button" type="submit"><b>Save</b></button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+        </script>
+    </body>
+</html>

@@ -1,0 +1,230 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bought Item Details</title>
+    {%tailwind_css%}
+
+</head>
+
+<body class="relative bg-blue pb-[2rem] tracking-[.02em]">
+
+
+    <!-- nav bar -->
+
+    {%load static%}
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+
+    <!-- nav bar ends here  -->
+
+    <div class="flex relative w-[100%] divide-x-2 divide-solid mt-[4rem] z-10">
+        <div id="itempicanduserdeatils" class="relative block w-[30vw] px-[2rem] box-border ">
+            <div id="imagewithcarousel" class="flex h-[70vh] min-h-[15rem] max-h-[31rem] relative items-center rounded-[15px] overflow-hidden">
+                <div id="carousel" class="flex absolute w-[100%] h-[100%] box-border justify-between z-20">
+                    <button id="leftarrow" onclick="goprev1()"
+                        class=" bg-black px-[.45rem]  h-[100%] opacity-0 hover:opacity-[.30] hover:duration-[.25s]">
+                        <img src="{%static 'Bidbay1/system_images/smallleftarrow.png'%}" alt="" class="">
+                    </button>
+                    <button id="rightarrow" onclick="gonext1()"
+                        class=" bg-black px-[.45rem]  h-[100%] opacity-0 hover:opacity-[.30] hover:duration-[.25s]">
+                        <img src="{%static 'Bidbay1/system_images/smallrightarrow.png'%}" alt="" class="">
+                    </button>
+                </div>
+
+                <div class="relative w-[100%] h-[100%] z-0 ">
+                    {%for item in bought_item_detail.0 %}
+                        <div id="item1" class="absolute h-[100%] w-[100%] duration-[1s]">
+                            <img id="shoe_image1" src="{{item}}" alt="" id=""
+                                class="w-[100%] h-[100%]">
+                        </div>
+                        
+                    {%endfor%}
+                </div>
+
+            </div>
+
+            <div id="userdeatils" class="bg-white mt-[2rem] rounded-[20px] box-border p-[1rem]">
+
+                <div id="profilepic_username_and_ads" class="flex flex-wrap">
+                    <a href="">
+                        <div id="image" class="w-[3rem] h-[3rem] rounded-[50%] overflow-hidden">
+                            <img src="{{bought_item_detail.1.0}}" alt="">
+                        </div>
+                    </a>
+                    <div id=" flex flex-col flex-wrap username_and_ads" class="ml-[.75rem]">
+                        <p class="font-medium text-wrap">{{bought_item_detail.1.1}}</p>
+                        <p class="text-sm font-normal">{{bought_item_detail.1.2}} ads</p>
+                    </div>
+                    
+
+                </div>
+
+                <div id="row1" class="flex flex-wrap justify-between py-[.5rem] mt-[.5rem]">
+                    <div id="detailtype" class="w-[30%] min-w-[4rem]">
+                        <p class="text-1xl font-medium">Member Since</p>
+                    </div>
+                    <div id="detailvalue" class="w-[65%]">
+                        <p class="text-1xl font-medium">{{bought_item_detail.1.3}}</p>
+                    </div>
+                </div>
+
+                
+            </div>
+
+        </div>
+
+
+        <div id="itemdetailsandplacebid" class="w-[70vw] px-[2rem] box-border">
+            <div class="bg-blue-dark rounded-[20px] px-[2rem] divide-y-2 divide-white">
+                <div id="producttype" class="py-[2rem]">
+                    <p class="text-4xl font-medium text-white">{{bought_item_detail.2.0}}</p>
+                </div>
+                <div id="description" class="py-[2rem] w-[100%] ">
+                    <p class="text-white font-medium text-2xl">Description:</p>
+                    <div type="text" placeholder="Enter the description of the product"
+                        class="flex w-[100%] mt-[.5rem] rounded-[10px] p-[1rem] h-[10rem] max-h-[12rem] min-h-[10rem] focus:outline-none border-none">
+                        <p class=" w-[100%]" name="product_description">{{bought_item_detail.2.1}}</p>
+                    </div>
+                </div>
+                <div id="productdeatils" class="py-[2rem] ">
+                    <p class="text-white text-2xl font-medium">Details:</p>
+                    <div id="details" class="bg-white p-[1rem] divide-y-2 border-none rounded-[10px] mt-[.5rem]">
+
+                        <div id="row1" class="flex flex-wrap justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] min-w-[4rem]">
+                                <p class="text-1xl font-medium">AD ID</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{bought_item_detail.2.2}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row1" class="flex flex-wrap  justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] min-w-[4rem]">
+                                <p class="text-1xl font-medium">Bought At</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">Rs. {{bought_item_detail.2.3}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row1" class="flex flex-wrap justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] min-w-[4rem]">
+                                <p class="text-1xl font-medium">Seller Phone</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{bought_item_detail.1.4}}</p>
+                            </div>
+                        </div>
+                        
+                        
+
+                        <div id="row2" class="flex flex-wrap justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] min-w-[4rem]">
+                                <p class="text-1xl font-medium">location</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{bought_item_detail.1.5}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row1" class="flex flex-wrap justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] min-w-[4rem]">
+                                <p class="text-1xl font-medium">Date</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{bought_item_detail.2.4}}</p>
+                            </div>
+                        </div> 
+
+                    </div>
+                </div>
+
+            
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        const slides1 = document.querySelectorAll("#item1");
+        var counter1 = 0;
+        slides1.forEach(
+            (item1, index) => {
+                item1.style.left = `${index * 100}%`;
+            }
+        )
+        const goprev1 = () => {
+            if (counter1 == 0) {
+                return;
+            }
+            else {
+                counter1--;
+                slideImage1();
+            }
+        }
+        const gonext1 = () => {
+            if (counter1 == (slides1.length - 1)) {
+                return;
+            }
+            else {
+                counter1++;
+                slideImage1();
+            }
+
+        }
+        const slideImage1 = () => {
+            slides1.forEach(
+                (item1, index) => {
+                    item1.style.transform = `translateX(-${counter1 * 100}%`;
+                }
+            )
+        }
+
+    </script>
+</body>
+
+</html>

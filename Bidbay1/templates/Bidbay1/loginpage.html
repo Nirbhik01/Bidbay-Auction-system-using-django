@@ -1,0 +1,84 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {%tailwind_css%}
+</head>
+
+<body class="flex flex-row justify-center font-roboto tracking-[0.02em]">
+    <div class="login_container_style">
+        <div id="image">
+            {%load static%}
+            <img src="{%static 'Bidbay1/profile_images/profile_icon.png' %}" alt="Login Image" height="100rem"
+                width="100rem">
+        </div>
+        <!-- <input type="hidden" id="message" value={{invalid_message}}> -->
+        <form id="form" class="flex flex-col items-left mt-[5rem] w-[80%]" method="POST"
+            action="{%url 'Bidbay1:login_user_authentication'%}">
+            {%csrf_token%}
+            <div id="username" class="">
+                <label class="login_label" for="Username">Username: </label><br>
+                <input id="credential1" type="text" class="login_input" name="username" placeholder="Enter Username">
+                <br>
+            </div>
+            <div class="mt-[1rem]">
+                <label class="login_label" for="Password">Password:</label><br>
+                <input id="credential2" type="password" class="login_input" name="password"
+                    placeholder="Enter Password"><br>
+            </div>
+
+            <div class="mt-2">
+                <p id='Invalid_part' for="Invalid_part" class="text-xs float-left text-invalid-red">
+                    {% if arg1 == '1' %}
+                        {{ "Invalid Username or password" }}
+                    {% endif %}
+
+                    {% if arg1 == '2' %}
+                        {{ "User Doesnt Exist" }}
+                    {% endif %}
+                </p>
+                <label for="Forgot_password" class="hidden text-xs float-right text-link-color"><a href=""><u>Forgot
+                            password?</u></a></label>
+            </div>
+
+            <button id="login_button" class="login_button" type="submit"><b>Login</b></button>
+
+        </form><br>
+
+        <div class="absolute bottom-0 mb-[10%]">
+            <p><span class="text-grey-dark">Don't have an account?</span> <a
+                    href="{%url 'Bidbay1:Bidbay_register'%}"><span class="text-link-color"><u>Signup</u></span></a></p>
+        </div>
+
+    </div>
+    <script>
+        document.getElementById('form').addEventListener('submit', function (event) {
+            var username_inputfield = document.getElementById('credential1').value;
+            var password_inputfield = document.getElementById('credential2').value;
+            if (username_inputfield === '' && password_inputfield === '') {
+                document.getElementById('Invalid_part').innerHTML = "Enter your Username and Password!!";
+                event.preventDefault();
+            }
+            else if (username_inputfield === '') {
+                document.getElementById('Invalid_part').innerHTML = "Enter Username!!";
+                event.preventDefault();
+            }
+            else if (password_inputfield === '') {
+                document.getElementById('Invalid_part').innerHTML = "Enter Password!!";
+                event.preventDefault();
+            }
+            else {
+                document.getElementById('Invalid_part').innerHTML = '';
+            }
+            
+
+        });
+    </script>
+</body>
+
+</html>

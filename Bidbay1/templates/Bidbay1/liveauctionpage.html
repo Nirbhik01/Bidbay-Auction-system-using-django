@@ -1,0 +1,443 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Auction</title>
+    {%tailwind_css%}
+    <style>
+        .msg-body {
+            margin-top: 0.25rem;
+            padding: 0.5rem;
+            background-color: #39789c;
+            color: #ffffff;
+            font-size: 1rem;
+            border-radius: 0.25rem;
+            word-wrap: break-word;
+          }
+        .single-message {
+            width: fit-content;
+            max-width: 60%;
+            clear: both;
+            }
+          .sent {
+            float: right;
+          }
+          .sent>.msg-body {
+            background-color: #399c6e;
+          }
+          .sender {
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+          }
+      
+           .chats-container {
+            width: 100%;
+            height: 80%;
+            overflow-y: scroll;
+           }
+          /* Hiding scrollbar for Chrome, Safari and Opera */
+        .chats-container::-webkit-scrollbar {
+            display: none;
+        }
+
+    
+    </style>
+    
+</head>
+<body class="relative bg-blue min-w-[50rem] tracking-[.02em]">
+    {%load static%}
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+    
+    <div class="flex relative w-[100%] divide-x-2 divide-solid mt-[4rem] z-0 ">
+        <div id="chatbox" class="sticky top-[5.5rem] h-[40rem] block w-[30vw] min-w-[20rem] px-[2rem] py-[.5rem]">
+            <div id="chatbox" class="relative h-[100%] px-[6px] bg-white rounded-[15px]">
+                <div id="topic" class=" flex justify-between border-b-2 p-[.75rem] h-[10%] border-grey-dark">
+                    <h1 class="text-[20px] text-grey-dark font-medium font-roboto">Current Amount</h1>
+                    <div class="flex">
+                        <p class="text-[20px] text-grey-dark font-medium font-roboto">Rs.</p><h1 class="text-[20px] text-grey-dark font-medium font-roboto" id="current_amount">{{liveauction_item_details.data1.2.3}}</h1>
+                    </div>
+                </div>
+                <div class="chats-container" id="chats-container">
+                    {%for message in messages%}
+                        {%for single_message in message%}
+                            {% if single_message.sender.user_name == user %}
+                                <div class="single-message sent">
+                                <div class="msg-body" id="price_message_me">{{single_message.message}}</div>
+                                <p class="sender">Me</p>
+                                </div>
+                            {% else %}
+                                <div class="single-message">
+                                <div class="msg-body" id="price_message">{{single_message.message}}</div>
+                                <p class="sender">{{single_message.sender.user_name}}</p>
+                                </div>
+                            {% endif %}
+                        {%endfor%}
+                    {%endfor%}    
+                </div>
+                <div class="w-[100%] h-[10%] mt-[1rem]">
+                    <form id="msg-form" class="w-[100%] h-[100%]" action="" method="POST">
+                        <input type="number" id="message" class="w-[100%] border-none bg-grey rounded-[12px]" placeholder="Enter Amount">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="itemanddetails" class="w-[70vw] px-[2rem] box-border ">
+            
+            <div id="image" class=" flex w-[100%] justify-center items-center h-[83vh] min-w-[30rem] rounded-[15px] overflow-hidden">
+                <div id="imagewithcarousel" class="flex h-[100%] w-[100%] relative  items-center justify-center overflow-hidden bg-black bg-opacity-[.7]">
+                    <div id="carousel" class="flex absolute w-[100%] h-[100%] box-border  justify-between z-20">
+                        <button id="leftarrow" onclick="goprev1()"
+                            class=" bg-black px-[12%]  h-[100%] opacity-0 hover:opacity-[.30] hover:duration-[.25s]">
+                            <img src="{%static 'Bidbay1/system_images/smallleftarrow.png'%}" alt="" class="">
+                        </button>
+                        <button id="rightarrow" onclick="gonext1()"
+                            class=" bg-black px-[12%] h-[100%] opacity-0 hover:opacity-[.30] hover:duration-[.25s]">
+                            <img src="{%static 'Bidbay1/system_images/smallrightarrow.png'%}" alt="" class="">
+                        </button>
+                    </div>
+    
+                    <div class=" flex relative w-[50%] h-[100%] z-0 overflow-hidden">
+
+                        {% for items in liveauction_item_details.data1.0 %}
+                        <div id="item1" class="absolute h-[100%] w-[100%] duration-[1s]">
+                            <img id="shoe_image1" src="{{items}}" alt="" id=""
+                                class="w-[100%] h-[100%]">
+                            
+                        </div>
+                        {%endfor%}
+                       
+                    </div>
+    
+                </div>
+            </div>
+            
+            <div id="imagedetails" class="">
+                <div id="productdeatils" class="py-[2rem] ">
+                    <p class="text-white text-4xl font-medium">{{liveauction_item_details.data1.2.0}}</p>
+
+                    <div id="details" class="bg-white p-[1rem] divide-y-2 border-none rounded-[15px] mt-[1rem]">
+
+                        <div id="profilepic_username_and_ads" class="flex flex-wrap mt-[.5rem] mb-[1rem] ">
+                            <a href="{%url 'Bidbay1:Bidbay_profile'%}">
+                                <div id="image" class="w-[3rem] h-[3rem] rounded-[50%] overflow-hidden">
+                                    <img src="{{liveauction_item_details.data1.1.0}}" alt="">
+                                </div>
+                            </a>
+                            <div id="username_and_ads" class="ml-[.75rem]">
+                                <p class="font-medium">{{liveauction_item_details.data1.1.1}}</p>
+                                <p class="text-sm font-normal">{{liveauction_item_details.data1.1.2}} ads</p>
+                            </div>
+        
+                        </div>
+
+                        <div id="row1" class="flex justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] ">
+                                <p class="text-1xl font-medium">AD ID</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{liveauction_item_details.data1.2.2}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row2" class="flex justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] ">
+                                <p class="text-1xl font-medium">Phone</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{liveauction_item_details.data1.1.4}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row3" class="flex justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] ">
+                                <p class="text-1xl font-medium">Description</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{liveauction_item_details.data1.2.1}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row4" class="flex justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] ">
+                                <p class="text-1xl font-medium">Loaction</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <p class="text-1xl font-medium">{{liveauction_item_details.data1.1.5}}</p>
+                            </div>
+                        </div>
+
+                        <div id="row5" class="flex justify-between py-[.5rem]">
+                            <div id="detailtype" class="w-[20%] ">
+                                <p class="text-1xl font-medium">AD Expiry</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%] ">
+                                <div id="countdown">
+                                    {{ liveauction_item_details.data1.3.0 | stringformat:"02d" }} : {{liveauction_item_details.data1.3.1 |stringformat:"02d" }} : {{ liveauction_item_details.data1.3.2|stringformat:"02d" }}
+                                </div>
+                        
+                            </div>
+                        </div>
+
+                        <div id="row6" class="flex justify-between py-[.5rem] mt-[.5rem]">
+                            <div id="detailtype" class="w-[20%]">
+                                <p class="text-1xl font-medium">Member Since</p>
+                            </div>
+                            <div id="detailvalue" class="w-[75%]">
+                                <p class="text-1xl font-medium">{{liveauction_item_details.data1.1.3}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        
+        const slides1 = document.querySelectorAll("#item1");
+        var counter1 = 0;
+        slides1.forEach(
+            (item1, index) => {
+                item1.style.left = `${index * 100}%`;
+            }
+        )
+        const goprev1 = () => {
+            if (counter1 == 0) {
+                return;
+            }
+            else {
+                counter1--;
+                slideImage1();
+            }
+        }
+        const gonext1 = () => {
+            if (counter1 == (slides1.length - 1)) {
+                return;
+            }
+            else {
+                counter1++;
+                slideImage1();
+            }
+
+        }
+        const slideImage1 = () => {
+            slides1.forEach(
+                (item1, index) => {
+                    item1.style.transform = `translateX(-${counter1 * 100}%`;
+                }
+            )
+        }
+
+        const slides2 = document.querySelectorAll("#item2");
+        var counter2 = 0;
+        slides2.forEach(
+            (item2, index) => {
+                item2.style.left = `${((index * 11) + index) + .5}rem`;
+            }
+        )
+        const goprev2 = () => {
+            if (counter2 == 0) {
+                return;
+            } else {
+                counter2--;
+                slideImage2();
+            }
+        }
+        const gonext2 = () => {
+            if (counter2 == (slides2.length - 4)) {
+                return;
+            } else {
+                counter2++;
+                slideImage2();
+            }
+
+        }
+        const slideImage2 = () => {
+            slides2.forEach(
+                (item2, index) => {
+                    item2.style.transform = `translateX(-${((counter2 * 11) + counter2)}rem)`;
+                }
+            )
+        }
+
+        function updateTimer() {
+            var hours = parseInt(document.getElementById('countdown').textContent.split(':')[0]);
+            var minutes = parseInt(document.getElementById('countdown').textContent.split(':')[1]);
+            var seconds = parseInt(document.getElementById('countdown').textContent.split(':')[2]);
+ 
+            if (seconds > 0) {
+                seconds--;
+            } else {
+                if (minutes > 0) {
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    if (hours > 0) {
+                        hours--;
+                        minutes = 59;
+                        seconds = 59;
+                    } else {
+                        // Timer has reached zero, you can handle this case as needed
+                    }
+                }
+            }
+ 
+            // Update the timer display
+            document.getElementById('countdown').textContent =
+                (hours < 10 ? '0' : '') + hours + ' : ' +
+                (minutes < 10 ? '0' : '') + minutes + ' : ' +
+                (seconds < 10 ? '0' : '') + seconds;
+        }
+ 
+        // Update the timer every second
+        setInterval(updateTimer, 1000);
+
+        const itemID = "{{ liveauction_item_details.data1.2.2 }}";
+        const userindicator="{{user}}";
+
+        
+
+    // Construct the WebSocket URL
+        const socketURL = `ws://${window.location.host}/ws/messages/${itemID}/${userindicator}/`;
+        console.log(socketURL);
+        console.log("establishing socket connection...");
+        const socket = new WebSocket(socketURL);
+
+        //send message
+        const message_form = document.getElementById('msg-form');
+        message_form.addEventListener("submit", function(event){
+            event.preventDefault();
+
+            var entered_bid_amount=parseInt(document.getElementById("message").value);
+            var current_bid_amount=parseInt(document.getElementById("current_amount").textContent.replace('Rs. ', ''));
+
+            //console.log(entered_bid_amount, current_bid_amount);
+            if (entered_bid_amount > current_bid_amount){
+                
+                document.getElementById("current_amount").innerHTML =` ${entered_bid_amount}`;
+            }
+            
+            //console.log("sending_message");
+            let message_sent = document.getElementById('message').value;
+            //console.log("Sending...",message_sent);
+            socket.send(
+                JSON.stringify({
+                    message: message_sent,
+                    room_name : itemID,
+                    sender : userindicator,
+                })
+            );
+        });
+
+        let chat_div = document.getElementById('chats-container');
+        const scrollToBottom=()=>{
+            
+            chat_div.scrollTop = chat_div.scrollHeight;
+        }
+
+        //recieve message from backend
+
+        socket.addEventListener('message',(e)=>{
+            const data = JSON.parse(e.data)['message'];
+            //console.log("received message", data);
+            let sender = data ['sender'];
+            let content=data['message'];
+            //console.log(content);
+            //console.log(document.getElementById("current_amount").textContent)
+            comparing_price=parseInt(document.getElementById("current_amount").textContent);
+            //console.log(comparing_price);
+            if (parseInt(content) > comparing_price){
+            //    console.log("entered socket");
+                document.getElementById("current_amount").innerHTML = content;
+            }
+
+            if (sender == userindicator){
+                document.getElementById('message').value="";
+            }
+            const chats_div = document.getElementById('chats-container');
+
+            if (sender == userindicator){
+                chats_div.innerHTML += `<div class="single-message sent">
+                                <div class="msg-body" id="price_message_me">${content}</div>
+                                <p class="sender">Me</p>
+                                </div>`;
+            }
+            else{
+
+                chats_div.innerHTML += `<div class="single-message">
+                    <div class="msg-body" id="price_message_me">${content}</div>
+                    <p class="sender">${sender}</p>
+                    </div>`;
+
+            }
+            // Scroll to the bottom
+            scrollToBottom();
+        });
+        
+    function createWebSocket() {
+        const socket = new WebSocket(socketURL);
+
+        socket.addEventListener('open', function (event) {
+            console.log("WebSocket connection established");
+        });
+
+        socket.addEventListener('message', function (event) {
+            const data = JSON.parse(event.data);
+            // Handle the received message here
+        });
+
+        socket.addEventListener('close', function (event) {
+            console.log('WebSocket closed. Reconnecting...');
+            setTimeout(createWebSocket, 1000);  // Attempt to reconnect after 1 second
+        });
+
+        return socket;
+    }
+
+    createWebSocket();
+    </script>
+
+</body>
+</html>

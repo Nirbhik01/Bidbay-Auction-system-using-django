@@ -1,0 +1,143 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Item</title>
+    {%tailwind_css%}
+</head>
+
+<body class="bg-blue min-w-[50rem] tracking-[.02em]">
+    <!-- nav bar -->
+
+    {%load static%}
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <!-- nav bar ends here -->
+
+    <div id="upload_item_criteria" class="mt-[4rem] mx-[2rem] m-auto  bg-white rounded-[20px] px-[2rem] py-[1rem]">
+        <p class=" text-4xl font-semibold mt-[1rem]">Upload Item</p>
+        <form id="inputfields" name="form" class="flex my-[1rem] flex-wrap space-x-[2rem] w-[100%]" action="{%url 'Bidbay1:store_item_details_and_images'%}" method="POST" enctype="multipart/form-data">
+            {%csrf_token%}
+            <div id="descriptionandcategory" class="grow w-[45%] min-w-[30rem] my-[1rem]">
+                <div class="border-[3px] border-grey rounded-[20px] p-[2rem] bg-white  w-[100%]">
+                    <p for="Adtitle" class="text-2xl font-medium">Description</p>
+                    <div id="nameand_description" class="text-1xl mt-[1rem]">
+                        <p>Product Name:</p>
+                        <input type="text" name="item_name"
+                            class="mt-[1rem] px-[5px] w-[100%] h-[2rem] bg-grey rounded-[7px] border-none focus:outline-none">
+                    </div>
+                    <div id="nameand_description" class="text-1xl mt-[1rem]">
+                        <p>Product Description:</p>
+                        <textarea type="text" name="item_description" resize="none"
+                            class="mt-[1rem] w-[100%] h-[6rem] p-[5px] border-none bg-grey resize-none rounded-[7px] focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="border-[3px] border-grey rounded-[20px] p-[2rem] mt-[2rem] bg-white  w-[100%]">
+                    <p for="Adtitle" class="text-2xl font-medium">Category</p>
+                    <div id="nameand_description" class="text-1xl mt-[1rem]">
+                        <p>Product Category:</p>
+
+                        <select name="item_category" id=""
+                            class="w-[100%]  bg-grey rounded-[7px] border-none  focus:outline-none mt-[1rem]">
+                            <option value="" disabled selected hidden class=""></option>
+                            <option value="Shoes" class="">Shoes</option>
+                            <option value="Cars" class="">Cars</option>
+                            <option value="Watches" class="">Watches</option>
+                            <option value="Bikes" class="">Bikes</option>
+                            <option value="Cycles" class="">Cycles</option>
+                            <option value="Furniture" class="">Furnitures</option>
+                            <option value="Books" class="">Books</option>
+                            <option value="Antiques" class="">Antiques</option>
+                            <option value="Phones" class="">Phones</option>
+                            <option value="Instruments" class="">Instruments</option>
+                            <option value="Other" class="">Others</option>
+                        </select>
+                    </div>
+                    <div id="nameand_description" class="text-1xl mt-[1rem]">
+                        <p>Auction Type</p>
+
+                        <select name="item_auction_type" id=""
+                            class="w-[100%] mt-[1rem] bg-grey rounded-[7px] border-none  focus:outline-none">
+                            <option value="" disabled selected hidden class=""></option>
+                            <option value="Normal" class="">Normal</option>
+                            <option value="live" class="">live</option>
+                           
+                        </select>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <div id="imageandpricing" class="grow my-[1rem] w-[45%] min-w-[30rem] ">
+                <div class="border-[3px] border-grey rounded-[20px] p-[2rem] bg-white  w-[100%]">
+                    <p for="Adtitle" class="text-2xl font-medium">Upload Pics:</p>
+                    <div id="image" class="text-1xl mt-[1rem]">
+                        <p>Select Image:</p>
+                        <input type="file"  name="file" id="file" multiple
+                            class="mt-[1rem] p-[.5rem] w-[100%] border-none bg-grey rounded-[7px] focus:outline-none">
+                    </div>  
+                </div>
+                <div class="border-[3px] border-grey rounded-[20px] p-[2rem] mt-[2rem] bg-white  w-[100%]">
+                    <p for="Adtitle" class="text-2xl font-medium">Pricing:</p>
+                    <div id="price" class="text-1xl mt-[1rem]">
+                        <p>Set Start Bid:</p>
+                        <input type="Number" name="item_starting_price"
+                            class="mt-[1rem] px-[5px] w-[100%] border-none h-[2rem] bg-grey rounded-[7px] focus:outline-none">
+                    </div>
+                </div>
+                <div class="mt-[2rem] ">
+                    <button type="submit" class=" p-[.75rem] hover:scale-[1.05] hover:duration-[.25s] hover:shadow-lg rounded-[10px] text-white font-medium text-[22px] bg-blue">Upload Product</button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

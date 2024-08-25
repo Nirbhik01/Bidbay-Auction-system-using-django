@@ -1,0 +1,306 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    {%tailwind_css%}
+</head>
+
+<body class="bg-blue tracking-[.02em]">
+
+    {%load static%}
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <!-- nav bar ends -->
+    <div id="profiledetails " class="flex mt-[2rem] pl-[2rem] py-[2rem] w-[100%] divide-x-2">
+        <div id="userpicanddetails" class="w-[30%] pr-[2rem] min-w-[20rem]">
+            <div class="flex">
+                <img src="{{item_details.data4.0.0}}" alt=""
+                    class="mt-[rem] h-[100px] w-[100px] rounded-[50%]">
+                <div class="mt-[1rem] ml-[2rem] ">
+                    <p class=" text-2xl text-white font-medium">{{item_details.data4.0.1}}</p>
+                    <p id="no_of_ads" class="font-medium text-white">{{item_details.data4.0.2}} ads</p>
+                </div>
+            </div>
+            <p class="mt-[2rem] text-white text-2xl font-semibold">Personal Information:</p>
+            <div id="userdeatils" class="bg-white mt-[2rem] rounded-[20px] box-border p-[2rem]  min-w-[15rem]">
+                <div id="userdetails" class=" font-medium w-[100%] divide-y-2 ">
+
+
+                    <div id="userrow1" class="flex justify-between mb-[.5rem] ">
+                        <div id="userdetailtype" class=" w-[30%] ">
+                            <p>Name</p>
+                        </div>
+                        <div id="userdeatilvalue" class="w-[60%]">
+                            <p>{{item_details.data4.0.3}} {{item_details.data4.0.4}}</p>
+                        </div>
+                    </div>
+
+                    <div id="userrow2" class="flex justify-between my-[.5rem] pt-[.5rem]">
+                        <div id="userdetailtype" class=" w-[30%] ">
+                            <p>Username</p>
+                        </div>
+                        <div id="userdeatilvalue" class="w-[60%] ">
+                            <p>{{item_details.data4.0.1}}</p>
+                        </div>
+                    </div>
+
+                    <div id="userrow2" class="flex justify-between my-[.5rem] pt-[.5rem]">
+                        <div id="userdetailtype" class=" w-[30%] ">
+                            <p>Phone</p>
+                        </div>
+                        <div id="userdeatilvalue" class="w-[60%] ">
+                            <p>{{item_details.data4.0.5}}</p>
+                        </div>
+                    </div>
+
+                    <div id="userrow3" class="flex justify-between mt-[.5rem] pt-[.5rem]">
+                        <div id="userdetailtype" class=" w-[30%] ">
+                            <p>Location</p>
+                        </div>
+                        <div id="userdeatilvalue" class="w-[60%] ">
+                            <p>{{item_details.data4.0.6}}</p>
+                        </div>
+                    </div>
+
+                    <div id="userrow3" class="flex justify-between mt-[.5rem] pt-[.5rem]">
+                        <div id="userdetailtype" class=" w-[30%] ">
+                            <p>Email</p>
+                        </div>
+                        <div id="userdeatilvalue" class="w-[60%] ">
+                            <p>{{item_details.data4.0.7}}</p>
+                        </div>
+                    </div>
+
+                    <div id="userrow3" class="flex justify-between mt-[.5rem] pt-[.5rem]">
+                        <div id="userdetailtype" class=" w-[35%] ">
+                            <p>Member Since</p>
+                        </div>
+                        <div id="userdeatilvalue" class="w-[60%] ">
+                            <p>{{item_details.data4.0.8}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="w-[43.15%] min-w-[16rem]">
+
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings:</p>
+            <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
+
+                {%for items in item_details.data4.1 %}
+                    {%if items.6 == 'Normal'%}
+                        <form action="{%url 'Bidbay1:Bidbay_itemdetails'%}" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                            <button id="item1"
+                                class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
+                                <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                <p id="item_time_left" class="text-[12px]">{{items.3}} days {{items.5}}hr</p>
+                                <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                            </button>
+                        </form>
+
+                    {%else%}
+                        <form action="{%url 'Bidbay1:Bidbay_liveauction' room_name=items.0 user_name=item_details.data4.0.1%}" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <input type="text" name="live_item_id" class="hidden" value="{{items.0}}">
+                            <button id="item3"
+                                class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
+                                <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                
+                                <div id="countdown" class="flex text-[12px]">
+                                    <input type="hidden" value="{{items.7.0}}" id="countdown11">
+                                    <p id="countdown1">
+                                        {{ items.7.0 | stringformat:"02d" }}
+                                    </p> 
+                                    : 
+                                    <input type="hidden" value="{{items.7.1}}" id="countdown12">
+                                    <p id="countdown2">
+                                        {{ items.7.1 | stringformat:"02d" }} 
+                                    </p>
+                                    : 
+                                    <input type="hidden" id="countdown13" value="{{items.7.2}}"> 
+                                    <p id="countdown3"> 
+                                        {{ items.7.2 | stringformat:"02d" }}
+                                    </p>
+                                </div>
+                                <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                            </button>
+                        </form>
+
+                    {%endif%}
+                {%endfor%}
+            </div>
+
+            {%if item_details.data4.3%}
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products:</p>
+                <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
+
+                    {%for items in item_details.data4.3 %}
+                        <form action="{%url 'Bidbay1:Bidbay_boughtitemdetail'%}" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                            <button id="item1"
+                                class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
+                                <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                <p id="item_sell_data" class="text-[12px]">{{items.4}}</p>
+                                <p id="final_bid" class="font-medium">Rs.{{items.3}}</p>
+                            </button>
+                        </form>
+                    {%endfor%}  
+                </div>
+            {%endif%}
+            {%if item_details.data4.2%}
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products:</p>
+                <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
+
+                    {%for items in item_details.data4.2 %}
+                        <form action="{%url 'Bidbay1:Bidbay_solditemdetail'%}" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                            <button id="item1"
+                                class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
+                                <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                <p id="item_sell_data" class="text-[12px]">{{items.4}}</p>
+                                <p id="final_bid" class="font-medium">Rs.{{items.3}}</p>
+                            </button>
+                        </form>
+                    {%endfor%} 
+                </div>
+            {%endif%}
+        </div>
+        <div id="accountsettings" class=" w-[20%] mr-[2rem]">
+            <p class="px-[2rem] mb-[2rem] font-medium text-white text-3xl">Settings:</p>
+            <div class="mx-[2rem] w-[100%] divide-y-[2px] bg-white rounded-[15px] divide-grey-dark px-[1rem]">
+                
+                <form action="{%url 'Bidbay1:Bidbay_editprofileinfo'%}" method="POST">
+                    {%csrf_token%}
+                    <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Edit Profile Info</button>
+                </form>
+
+                <form action="{%url 'Bidbay1:Bidbay_deleteitems'%}" method="POST">
+                    {%csrf_token%}
+                    <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Delete Items</button>
+                </form>
+                <form action="{%url 'Bidbay1:delete_profile'%}" method="POST">
+                    {%csrf_token%}
+                    <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Delete Profile</button>
+                </form>
+                <form action="{%url 'Bidbay1:logout_functionality'%}" method="POST">
+                    {%csrf_token%}
+                    <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Logout</button>
+                </form>
+
+                
+            </div>
+    
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function updateTimer() {
+                const hoursElements = document.querySelectorAll("#countdown11");
+                const minutesElements = document.querySelectorAll("#countdown12");
+                const secondsElements = document.querySelectorAll("#countdown13");
+
+                const hourfields = document.querySelectorAll("#countdown1");
+                const minutefields = document.querySelectorAll("#countdown2");
+                const secondfields = document.querySelectorAll("#countdown3");
+
+                // Loop through the elements and update their text content
+                for (let i = 0; i < hoursElements.length; i++) {
+                    let hours = parseInt(hoursElements[i].value);
+                    let minutes = parseInt(minutesElements[i].value);
+                    let seconds = parseInt(secondsElements[i].value);
+
+                    console.log(hours, minutes, seconds)
+
+                    if (seconds > 0) {
+                        seconds--;
+                    } else {
+                        if (minutes > 0) {
+                            minutes--;
+                            seconds = 59;
+                        } else {
+                            if (hours > 0) {
+                                hours--;
+                                minutes = 59;
+                                seconds = 59;
+                            } else {
+                                // Timer has reached zero, you can handle this case as needed
+                            }
+                        }
+                    }
+
+                    hoursElements[i].value = (hours < 10 ? '0' : '') + hours;
+                    minutesElements[i].value = (minutes < 10 ? '0' : '') + minutes;
+                    secondsElements[i].value = (seconds < 10 ? '0' : '') + seconds;
+
+                    hourfields[i].innerHTML= hoursElements[i].value;
+                    minutefields[i].innerHTML = minutesElements[i].value;
+                    secondfields[i].innerHTML = secondsElements[i].value;
+
+                }
+            }
+
+            setInterval(updateTimer, 1000); 
+        }); 
+
+    </script>
+
+</body>
+
+</html>

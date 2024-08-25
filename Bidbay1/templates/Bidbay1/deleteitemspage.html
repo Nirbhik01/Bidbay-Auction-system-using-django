@@ -1,0 +1,195 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Items</title>
+    {%tailwind_css%}
+    
+</head>
+
+<body class="bg-blue min-w-[50rem] tracking-[.02em]">
+    <!-- nav bar -->
+
+    {%load static%}
+
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <form id="delete_items_display" class="mt-[4rem] mb-[2rem] mx-[2rem]" method="POST" action="{%url 'Bidbay1:delete_items'%}">
+        {%csrf_token%}
+        <div class="flex justify-between items-center w-[100%]">
+            <div class="flex">
+                <p class=" text-4xl text-white font-medium">Delete Products : </p>
+            </div>
+            <div class="flex items-center justify-between w-[17%] space-x-[.5rem]" >
+                <button type="button" onclick="selectalltags()" class="text-2xl text-white font-medium" ><p id="selectall_text">Select All</p></button>
+                <button type="submit" class=" bg-white text-2xl font-medium border-none focus:border-none text-blue-dark rounded-[7px] px-[1rem] py-[.35rem] ">Delete</button>
+            </div>
+           
+        </div>
+        <div id="products" class="flex my-[2rem] rounded-[15px] ">
+            <div class="flex flex-wrap bg-blue-dark p-[2rem] rounded-[15px]">
+                {%for items in item_details %}
+                    {%if items.6 == 'Normal'%}
+                            <div class="relative flex ml-[.5rem] cursor-pointer">
+                                <input type="checkbox" name="normal_checkbox_{{items.0}}" class="rounded-[3px]" id="normal_checkbox_{{ forloop.counter }}">
+                                <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                                <div id="item1" onclick="document.getElementById('normal_checkbox_{{ forloop.counter }}').click();"
+                                    class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem]  border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] " >
+                                    <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                    <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                    <p id="item_time_left" class="text-[12px]">{{items.3}} days {{items.5}}hr</p>
+                                    <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                                </div>
+                            </div>
+                       
+                    {%else%}
+                            <div class="relative flex ml-[.5rem] cursor-pointer">
+                                <input type="checkbox" name="live_checkbox_{{items.0}}" class="rounded-[3px]" id="live_checkbox_{{ forloop.counter }}" value="{{items.0}}">
+                                <input type="text" name="live_item_id" class="hidden" value="{{items.0}}">
+                                <div id="item3" onclick="document.getElementById('live_checkbox_{{ forloop.counter }}').click();"
+                                    class="bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] " >
+                                    
+                                    <img src="{{items.1}}" alt=""
+                                        class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                    <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                    
+                                    <div id="countdown" class="flex text-[12px]">
+                                        <input type="hidden" value="{{items.7.0}}" id="countdown11">
+                                        <p id="countdown1">
+                                            {{ items.7.0 | stringformat:"02d" }}
+                                        </p> 
+                                        : 
+                                        <input type="hidden" value="{{items.7.1}}" id="countdown12">
+                                        <p id="countdown2">
+                                            {{ items.7.1 | stringformat:"02d" }} 
+                                        </p>
+                                        : 
+                                        <input type="hidden" id="countdown13" value="{{items.7.2}}"> 
+                                        <p id="countdown3"> 
+                                            {{ items.7.2 | stringformat:"02d" }}
+                                        </p>
+                                    </div>
+                                    <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                                </div>
+                            </div>
+                    {%endif%}
+                {%endfor%}
+            </div>
+        </div>
+    </form>
+
+    <script>
+              
+        function updateTimer() {
+            const hoursElements = document.querySelectorAll("#countdown11");
+            const minutesElements = document.querySelectorAll("#countdown12");
+            const secondsElements = document.querySelectorAll("#countdown13");
+
+            const hourfields = document.querySelectorAll("#countdown1");
+            const minutefields = document.querySelectorAll("#countdown2");
+            const secondfields = document.querySelectorAll("#countdown3");
+
+            // Loop through the elements and update their text content
+            for (let i = 0; i < hoursElements.length; i++) {
+                let hours = parseInt(hoursElements[i].value);
+                let minutes = parseInt(minutesElements[i].value);
+                let seconds = parseInt(secondsElements[i].value);
+
+
+
+                if (seconds > 0) {
+                    seconds--;
+                } else {
+                    if (minutes > 0) {
+                        minutes--;
+                        seconds = 59;
+                    } else {
+                        if (hours > 0) {
+                            hours--;
+                            minutes = 59;
+                            seconds = 59;
+                        } else {
+                            // Timer has reached zero, you can handle this case as needed
+                        }
+                    }
+                }
+
+                hoursElements[i].value = (hours < 10 ? '0' : '') + hours;
+                minutesElements[i].value = (minutes < 10 ? '0' : '') + minutes;
+                secondsElements[i].value = (seconds < 10 ? '0' : '') + seconds;
+
+                hourfields[i].innerHTML= hoursElements[i].value;
+                minutefields[i].innerHTML = minutesElements[i].value;
+                secondfields[i].innerHTML = secondsElements[i].value;
+
+            }
+        }
+
+        
+        // Function to select all checkboxes on the page
+        var checked = false;
+        function selectalltags() {
+            //var selectAllCheckbox = document.querySelectorAll('input[name="selectall"]');
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            if (checked === false){
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked=true; 
+                    
+                }
+                checked=true;
+                document.getElementById("selectall_text").innerHTML="Unselect all";
+            }
+            else if (checked === true){
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked=false;
+                    
+                }
+                checked=false;
+                document.getElementById("selectall_text").innerHTML="Select all";
+            }
+        }
+        
+        setInterval(updateTimer, 1000);
+    </script> 
+</body>
+</html>

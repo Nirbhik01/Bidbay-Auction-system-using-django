@@ -1,0 +1,329 @@
+{%load static tailwind_tags%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item List</title>
+    {%tailwind_css%}
+    <link rel="stylesheet" href="output.css">
+</head>
+
+<body class="bg-blue pb-[2rem] tracking-[.02em]">
+    <!-- nav bar -->
+
+    {%load static%}
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+        <div class="flex w-[20rem] h-[100%]  justify-between items-center">
+
+            <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
+                <a href="{%url 'Bidbay1:Bidbay_home'%}" class="text-blue text-2xl "><b>BIDBAY</b></a>
+            </div>
+
+            <div class="flex items-center ml-[3rem] font-semibold w-[20rem]  box-border justify-between ">
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_home'%}">Home</a></li>
+
+                <li type="none" class="hover:scale-[1.05] hover:transition-[2000ms]"><a
+                        href="{%url 'Bidbay1:Bidbay_uploaditem'%}">
+                        Upload Items </a></li>
+            </div>
+
+        </div>
+
+        <div class="flex items-center ml-[2rem] w-[19%] h-[100%] justify-between min-w-[15rem]">
+            <form class=" w-[70%]" method="POST" enctype="multipart/form-data" action="{%url 'Bidbay1:search_functionality'%}">
+                {%csrf_token%}
+                <input type="text" placeholder="Search" name="search_box"
+                    class="flex bg-grey w-[100%] rounded-[10px] placeholder-grey-dark pl-[10px] h-[2rem] box-border border-none focus:outline-none">
+            </form>
+            <div class="w-[20%]">
+
+                <form action="{%url 'Bidbay1:Bidbay_profile'%}" method="POST" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="reference_image" value="{{user_profile_pic_to_profilepage}}">
+                    <button type="submit" class="h-[100%] w-[13%] min-w-[2.5rem]"><img
+                        src="{{user_profile_pic}}" alt="profile image" class="h-[100%] rounded-[50%]">
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+    <!-- nav bar ends here -->
+
+
+    <div id="containing_all_contents" class="flex items-start mt-[4rem]">
+
+        <!-- category Part -->
+
+        <div id="category pary" class=" bg-grey w-[14rem]  p-[2rem]  box-border rounded-r-[20px]">
+            <h1 class="text-[18px] font-medium">Categories</h1>
+            <ul class="mt-[1rem] space-y-[1.25rem]">
+                {%for item in item_category%}
+                <form action="{%url 'Bidbay1:get_item_details_for_item_list_page'%}" method="POST"
+                    enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <input type="hidden" name="category_name" value="{{item}}">
+                    <button type="submit">
+                        <li type="none">{{item}}</li>
+                    </button>
+                </form>
+                {%endfor%}
+            </ul>
+
+        </div>
+
+        <!-- Category part ends here -->
+
+        <div id="itemlistcontainer" class="bg-blue-dark rounded-[20px] ml-[2rem] p-[2rem]">
+            <p class="text-4xl text-white font-semibold">
+                {%if itemslist.data21%}
+                    Search Results For : {{itemslist.data21}}
+                {%else%}
+                    Search Results For : {{search_data.search_text}}
+                {%endif%}
+            </p>
+            <div id="itemlist" class="">
+                {%if itemslist.data2%}
+                    {%for item in itemslist.data2%}
+                        {% if item.7 == 'Normal' %}
+                            <form action="{%url 'Bidbay1:Bidbay_itemdetails'%}" method="POST" enctype="multipart/form-data">
+                                {%csrf_token%}
+                                
+                                <input type="text" name="this_item_id" class="hidden" value="{{item.0}}">
+                                <button type="submit"
+                                    class=" flex m-auto h-[15rem] max-h-[16rem] min-h-[10rem] max-w-[50rem] bg-grey min-w-[20rem] w-[50vw] hover:scale-[1.025] hover:duration-[.25s] mt-[2rem]  rounded-[15px] overflow-hidden box-border p-[.2rem] justify-between">
+                                    <div id="image" class=" w-[30%] h-[100%]">
+                                        <img src="{{item.5}}" alt="sports shoe"
+                                            class="w-[100%] h-[100%] rounded-l-[13px]">
+                                    </div>
+                                    <div id="details"
+                                        class="flex flex-col w-[69%] text-left h-[100%] ml-[1rem] rounded-[10px] py-[.75rem] justify-between">
+                                        <p id="itemname" class="text-[20px] font-medium">{{item.1}}</p>
+                                        <p id="item_description" class="text-[16px]">{{item.2}} </p>
+                                        <p id="current_bid" class="text-[18px] font-bold"> Current Bid : Rs.{{item.3}}</p>
+                                        <p id="time_remaining" class="font-medium">AD Expiry : {{item.4}} days {{item.6}} hrs</p>
+                                    </div>
+                                </button>
+                            </form>
+
+                        {%else%}
+                            <form action="{%url 'Bidbay1:Bidbay_liveauction' room_name=item.0 user_name=userindicator%}" method="POST" enctype="multipart/form-data">
+                                {%csrf_token%}
+                                <input type="text" name="live_item_id" class="hidden" value="{{item.0}}">
+                                <button type="submit" id="item3"
+                                    class=" flex m-auto h-[15rem] max-h-[16rem] min-h-[10rem] max-w-[50rem] bg-grey min-w-[20rem] w-[50vw] hover:scale-[1.025] hover:duration-[.25s] mt-[2rem]  rounded-[15px] overflow-hidden box-border p-[.2rem] justify-between">
+                                    <div id="image" class=" w-[30%] h-[100%]">
+                                        <img src="{{item.5}}" alt="sports shoe"
+                                            class="w-[100%] h-[100%] rounded-l-[13px]">
+                                    </div>
+                                    <div id="details"
+                                        class="flex flex-col w-[69%] text-left h-[100%] ml-[1rem] rounded-[10px] py-[.75rem] justify-between">
+                                        <p id="itemname" class="text-[20px] font-medium">{{item.1}}</p>
+                                        <p id="item_description" class="text-[16px]">{{item.2}} </p>
+                                        <p id="current_bid" class="text-[18px] font-bold"> Current Bid : Rs.{{item.3}}</p>
+                                        <div id="countdown" class=" flex">
+                                            <p class="font-semibold">AD Expiry : &nbsp </p> 
+                                            <!--&nbsp is a space -->
+                                            <input type="hidden" value="{{item.8.0}}" id="countdown11">
+                                            <p id="countdown1">
+                                                {{ item.8.0 | stringformat:"02d" }}
+                                            </p> 
+                                            : 
+                                            <input type="hidden" value="{{item.8.1}}" id="countdown12">
+                                            <p id="countdown2">
+                                                {{ item.8.1 | stringformat:"02d" }} 
+                                            </p>
+                                            : 
+                                            <input type="hidden"  value="{{item.8.2}}" id="countdown13"> 
+                                            <p id="countdown3"> 
+                                                {{ item.8.2 | stringformat:"02d" }}
+                                            </p>
+                                        
+                                        </div>
+                                    </div>
+                                </button>
+                            </form> 
+                        {%endif%}
+                    {%endfor%}
+                {%endif%}
+                {%if search_data.search_data %}
+                    {%for item in search_data.search_data%}                     
+                            {% if item.7 == 'Normal' %}
+                                <form action="{%url 'Bidbay1:Bidbay_itemdetails'%}" method="POST" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    
+                                    <input type="text" name="this_item_id" class="hidden" value="{{item.0}}">
+                                    <button type="submit"
+                                        class=" flex m-auto h-[15rem] max-h-[16rem] min-h-[10rem] max-w-[50rem] bg-grey min-w-[20rem] w-[50vw] hover:scale-[1.025] hover:duration-[.25s] mt-[2rem]  rounded-[15px] overflow-hidden box-border p-[.2rem] justify-between">
+                                        <div id="image" class=" w-[30%] h-[100%]">
+                                            <img src="{{item.5}}" alt="sports shoe"
+                                                class="w-[100%] h-[100%] rounded-l-[13px]">
+                                        </div>
+                                        <div id="details"
+                                            class="flex flex-col w-[69%] text-left h-[100%] ml-[1rem] rounded-[10px] py-[.75rem] justify-between">
+                                            <p id="itemname" class="text-[20px] font-medium">{{item.1}}</p>
+                                            <p id="item_description" class="text-[16px]">{{item.2}} </p>
+                                            <p id="current_bid" class="text-[18px] font-bold"> Current Bid : Rs.{{item.3}}</p>
+                                            <p id="time_remaining" class="font-medium">AD Expiry : {{item.4}} days {{item.6}} hrs</p>
+                                        </div>
+                                    </button>
+                                </form>
+                            {%else%}
+                                <form action="{%url 'Bidbay1:Bidbay_liveauction' room_name=item.0 user_name=userindicator%}" method="POST" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <input type="text" name="live_item_id" class="hidden" value="{{item.0}}">
+                                    <button type="submit" id="item3"
+                                        class=" flex m-auto h-[15rem] max-h-[16rem] min-h-[10rem] max-w-[50rem] bg-grey min-w-[20rem] w-[50vw] hover:scale-[1.025] hover:duration-[.25s] mt-[2rem]  rounded-[15px] overflow-hidden box-border p-[.2rem] justify-between">
+                                        <div id="image" class=" w-[30%] h-[100%]">
+                                            <img src="{{item.5}}" alt="sports shoe"
+                                                class="w-[100%] h-[100%] rounded-l-[13px]">
+                                        </div>
+                                        <div id="details"
+                                            class="flex flex-col w-[69%] text-left h-[100%] ml-[1rem] rounded-[10px] py-[.75rem] justify-between">
+                                            <p id="itemname" class="text-[20px] font-medium">{{item.1}}</p>
+                                            <p id="item_description" class="text-[16px]">{{item.2}} </p>
+                                            <p id="current_bid" class="text-[18px] font-bold"> Current Bid : Rs.{{item.3}}</p>
+                                            <div id="countdown" class=" flex">
+                                                <p class="font-semibold">AD Expiry : &nbsp </p> 
+                                                <!--&nbsp is a space -->
+                                                <input type="hidden" value="{{item.8.0}}" id="countdown11">
+                                                <p id="countdown1">
+                                                    {{ item.8.0 | stringformat:"02d" }}
+                                                </p> 
+                                                : 
+                                                <input type="hidden" value="{{item.8.1}}" id="countdown12">
+                                                <p id="countdown2">
+                                                    {{ item.8.1 | stringformat:"02d" }} 
+                                                </p>
+                                                : 
+                                                <input type="hidden"  value="{{item.8.2}}" id="countdown13"> 
+                                                <p id="countdown3"> 
+                                                    {{ item.8.2 | stringformat:"02d" }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </form>
+                            {%endif%}
+                    {%endfor%}
+                {%endif%}
+            </div>
+        </div>
+
+        <div id="filters" class="flex-end p-[1rem] w-[24vw] ml-[2rem] min-w-[15rem]  rounded-[20px] box-border bg-blue-dark">
+            <form method="POST" class="block p-[1rem]" action="{%url 'Bidbay1:filtering_functionality'%}" enctype="multipart/form">
+                {%csrf_token%}
+                {%if itemslist.data2%}
+                    <input type="hidden" name="filter_data" value="{{itemslist.data2}}">
+                {%else%}
+                    <input type="hidden" name="filter_data" value="{{search_data.search_data}}">
+                {%endif%}
+                <p class="text-3xl text-white font-semibold">Filters:</p>
+                <div id="adjustprice" class="mt-[2rem] ">
+                    <p class="text-xl text-white font-semibold">Price:</p>
+                    <div id="inputs" class="flex flex-wrap gap-[1rem] mt-[.5rem]">
+                        <input type="number" placeholder="From" name="starting_price"
+                            class="h-[2.5rem] w-[45%] grow p-[.5rem] min-w-[9rem] mt-[.5rem] border-none rounded-[5px]">
+                        <input type="number" placeholder="to" name="ending_price"
+                            class="h-[2.5rem] w-[45%] grow p-[.5rem] min-w-[9rem] mt-[.5rem] border-none rounded-[5px]">
+                    </div>
+                </div>
+
+                <div id="Sortby" class=" mt-[1rem] ">
+                    <p class="text-xl text-white font-semibold">Sort by:</p>
+                    <div id="inputs" class="flex justify-between mt-[.5rem]">
+                        <select name="sort_name_price" id=""
+                            class=" w-[100%] border-none px-[.5rem] rounded-[5px]">
+                            <option value="" disabled selected hidden></option>
+                            <option value="Name">Name</option>
+                            <option value="Price">Price</option>
+                        </select>
+                    </div>
+                </div>
+                <div id = "Auction Status" class = "mt-[1rem]">
+                    <p class="text-xl text-white font-semibold">Auction Status:</p>
+                    <div id="inputs" class="flex justify-between mt-[.5rem]">
+                        <select name="sort_auction_type" id=""
+                            class=" w-[100%] px-[.5rem] border-none rounded-[5px] ">
+                            <option value="" disabled selected hidden></option>
+                            <option value="Normal">Normal</option>
+                            <option value="Live">Live</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="submit_button"
+                    class="mt-[2rem] m-auto min-w-[8rem] w-[40%] hover:scale-[1.05] hover:shadow-md hover:duration-[.25s]">
+                    <button type="submit"
+                        class="w-[100%] p-[.5rem] text-blue-dark font-semibold bg-white rounded-[5px]">Apply
+                        Filters</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            function updateTimer() {
+                const hoursElements = document.querySelectorAll("#countdown11");
+                const minutesElements = document.querySelectorAll("#countdown12");
+                const secondsElements = document.querySelectorAll("#countdown13");
+
+                const hourfields = document.querySelectorAll("#countdown1");
+                const minutefields = document.querySelectorAll("#countdown2");
+                const secondfields = document.querySelectorAll("#countdown3");
+
+                console.log(hoursElements.values())
+
+                // Loop through the elements and update their text content
+                for (let i = 0; i < hoursElements.length; i++) {
+                    let hours = parseInt(hoursElements[i].value);
+                    let minutes = parseInt(minutesElements[i].value);
+                    let seconds = parseInt(secondsElements[i].value);
+
+                    console.log(hours, minutes, seconds)
+
+                    if (seconds > 0) {
+                        seconds--;
+                    } else {
+                        if (minutes > 0) {
+                            minutes--;
+                            seconds = 59;
+                        } else {
+                            if (hours > 0) {
+                                hours--;
+                                minutes = 59;
+                                seconds = 59;
+                            } else {
+                                // Timer has reached zero, you can handle this case as needed
+                            }
+                        }
+                    }
+
+                    hoursElements[i].value = (hours < 10 ? '0' : '') + hours;
+                    minutesElements[i].value = (minutes < 10 ? '0' : '') + minutes;
+                    secondsElements[i].value = (seconds < 10 ? '0' : '') + seconds;
+
+                    hourfields[i].innerHTML= hoursElements[i].value;
+                    minutefields[i].innerHTML = minutesElements[i].value;
+                    secondfields[i].innerHTML = secondsElements[i].value;
+
+                }
+            }
+
+            setInterval(updateTimer, 1000); 
+        });
+        
+    </script>
+
+</body>
+
+</html>
