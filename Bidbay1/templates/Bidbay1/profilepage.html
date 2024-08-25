@@ -126,7 +126,7 @@
            
         </div>
         <div class="w-[43.15%] min-w-[16rem]">
-
+            {%if details.data4.1%}
             <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings:</p>
             <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
@@ -178,6 +178,9 @@
                     {%endif%}
                 {%endfor%}
             </div>
+            {%else%}
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">No Items listed</p>
+            {%endif%}
 
             {%if item_details.data4.3%}
                 <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products:</p>

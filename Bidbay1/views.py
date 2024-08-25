@@ -34,15 +34,16 @@ item_category=['Shoes','Cars','Watches','Bikes','Cycles','Furnitures','Books','A
 def Bidbay_login(request):
      global page_state_variable
      page_state_variable=1  
-     data={'arg1':'0'}   
+     data=request.session.get('login_data')
      return render(request, 'Bidbay1/loginpage.html',data)
 
 def Bidbay_register(request):
      global page_state_variable
      page_state_variable=2
+     data=request.session.get('prevent_event_action')
      # Room.objects.all().delete()
      # reset_user_id_sequence()
-     return render(request, 'Bidbay1/Registerpage.html')
+     return render(request, 'Bidbay1/Registerpage.html',{"data":data})
 
 def Bidbay_editprofileinfo(request):
      global page_state_variable
@@ -215,15 +216,17 @@ def login_user_authentication(request):
      request.session["userindicator"] = username
      username_list=list(Userdetails.objects.values_list('user_name',flat=True))
      check_username = username in username_list
-     
+     request.session["login_data"]={'arg1':'0'}
      if not check_username:
-          data={"arg1":'2'}
-          return render(request, 'Bidbay1/loginpage.html', data)
+          request.session["login_data"]={'arg1':'2'}
+          return redirect('Bidbay1:Bidbay_login')
+     
      elif match_entered_pw_with_pw_in_db(request, username,password):
+          request.session["login_data"]={'arg1':'0'}
           return redirect("Bidbay1:Bidbay_home")
      else:
-          data={'arg1':'1'}
-          return render(request,"Bidbay1/loginpage.html",data)
+          request.session["login_data"]={'arg1':'1'}
+          return redirect("Bidbay1:Bidbay_login")
 
 def delete_profile(request):
      if request.method=="POST":
@@ -849,23 +852,29 @@ def get_item_and_user_details_for_profilepage(request):
     
 def store_username_and_encryptedpwd(request):
      if request.method=='POST':
-        name=request.POST.get("username")
-        fname=request.POST.get("fname")
-        lname=request.POST.get("lname")
-        email=request.POST.get("email")
-        password=request.POST.get("password")
-        birthdate=request.POST.get("DOB")
-        phone=request.POST.get("phone")
-        address=request.POST.get("address")
-        date_joined = date.today()
-        profile_image = request.FILES["image"]
-        a=read_pw_and_encrypt(password).decode()
-        save_details=Userdetails(user_name=name,user_fname=fname,user_lname=lname,
-                                 user_email=email,user_pwd=a,user_DOB=birthdate,
-                                 user_phone=phone,
-                                 user_address=address,user_date_joined=date_joined,user_profile_image=profile_image)
-        save_details.save()
-        return redirect ("Bidbay1:Bidbay_login")
+          name=request.POST.get("username")
+          fname=request.POST.get("fname")
+          lname=request.POST.get("lname")
+          email=request.POST.get("email")
+          password=request.POST.get("password")
+          birthdate=request.POST.get("DOB")
+          phone=request.POST.get("phone")
+          address=request.POST.get("address")
+          date_joined = date.today()
+          profile_image = request.FILES["image"]
+          a=read_pw_and_encrypt(password).decode()
+          request.session['prevent_event_action']='0'
+          if Userdetails.objects.filter(user_name=name).exists():
+               request.session['prevent_event_action']='1'
+               return redirect("Bidbay1:Bidbay_register")
+          else:
+               save_details=Userdetails(user_name=name,user_fname=fname,user_lname=lname,
+                                        user_email=email,user_pwd=a,user_DOB=birthdate,
+                                        user_phone=phone,
+                                        user_address=address,user_date_joined=date_joined,user_profile_image=profile_image)
+               save_details.save()
+               request.session['prevent_event_action']='0'
+               return redirect ("Bidbay1:Bidbay_login")
         
 
 def read_pw_and_encrypt(password):
