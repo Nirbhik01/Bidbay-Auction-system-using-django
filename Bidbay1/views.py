@@ -389,6 +389,8 @@ def filtering_functionality(request):
 def save_changes_to_profile_details(request):
      
      if request.method=='POST':
+          new_fname = request.POST.get("fname")
+          new_lname = request.POST.get("lname")
           new_user_name=request.POST.get('username')
           new_email_address=request.POST.get('email')
           new_phone_number=request.POST.get('phone')
@@ -398,6 +400,12 @@ def save_changes_to_profile_details(request):
                new_user_profile_image = request.FILES["profileimage"]
           except:
                new_user_profile_image=None
+          
+          if new_fname =="":
+               new_fname=None
+               
+          if new_lname =="":
+               new_lname=None
           
           if new_user_name =="":
                new_user_name=None
@@ -413,6 +421,14 @@ def save_changes_to_profile_details(request):
                     
           user= Userdetails.objects.get(user_name=request.session.get('userindicator'))
           
+          if new_fname:
+               user.user_fname=new_fname
+               user.save()
+               
+          if new_lname:
+               user.user_lname=new_lname 
+               user.save()
+               
           if new_user_name:
                request.session['userindicator']= new_user_name
                user.user_name=new_user_name 
@@ -438,7 +454,6 @@ def save_changes_to_profile_details(request):
 
 def place_bid(request):
     
-
      item_id=request.POST.get('item_id')
      
      bid_amount=int(request.POST.get('bid_amount'))
@@ -511,7 +526,6 @@ def place_bid(request):
 def match_entered_pw_with_pw_in_db(request, username,password):
      entered_password=password
      db_password=fetch_pw_and_decrypt(username)
-     
      if entered_password==db_password:
           return True
      else:
@@ -581,12 +595,10 @@ def get_item_detail_for_deleting(request):
                current_item_details_list.append(item_details)
                
      for items in current_item_details_list:
+          
           if(items[6] == 'live' ):
-               
                live_item=Items.objects.get(item_id=items[0])
-               
                time_remaining=live_item.item_expiry_date - timezone.now()
-               
                hours = time_remaining.seconds // 3600
                minutes = (time_remaining.seconds % 3600) // 60
                seconds = time_remaining.seconds % 60

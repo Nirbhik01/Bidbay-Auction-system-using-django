@@ -115,9 +115,9 @@
                     {%endfor%}    
                 </div>
                 <div class="w-[100%] h-[10%] mt-[1rem]">
-                    <form id="msg-form" class="w-[100%] h-[100%]" action="" method="POST">
-                        <input type="number" id="message" class="w-[100%] border-none bg-grey rounded-[12px]" placeholder="Enter Amount">
-                    </form>
+                        <form id="msg-form" class="w-[100%] h-[100%]" action="" method="POST">
+                            <input type="number" id="message" class="w-[100%] border-none bg-grey rounded-[12px]" placeholder="Enter Amount">
+                        </form>
                 </div>
             </div>
         </div>
@@ -337,13 +337,22 @@
         const itemID = "{{ liveauction_item_details.data1.2.2 }}";
         const userindicator="{{user}}";
 
-        
+        const upload_user="{{ liveauction_item_details.data1.1.1 }}"
+
+        console.log(upload_user);
+
+        if (userindicator === upload_user){
+            const form_input = document.getElementById("message");
+            form_input.disabled=true;
+        }
 
     // Construct the WebSocket URL
         const socketURL = `ws://${window.location.host}/ws/messages/${itemID}/${userindicator}/`;
         console.log(socketURL);
         console.log("establishing socket connection...");
         const socket = new WebSocket(socketURL);
+
+
 
         //send message
         const message_form = document.getElementById('msg-form');
@@ -373,7 +382,6 @@
 
         let chat_div = document.getElementById('chats-container');
         const scrollToBottom=()=>{
-            
             chat_div.scrollTop = chat_div.scrollHeight;
         }
 

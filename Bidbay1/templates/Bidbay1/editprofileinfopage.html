@@ -56,31 +56,32 @@
                 <h1 class="text-3xl text-grey-dark"> <b> Edit Profile Information </b></h1>
                 <form id="form" class="flex flex-col  items-left mt-[2.5rem] w-[100%] text-grey-dark" method='POST' action="{%url 'Bidbay1:save_changes_to_profile_details'%}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <!-- <div class="flex grow flex-wrap gap-[1rem] ">
+
+                    <div class="flex grow flex-wrap gap-[1rem] ">
                         <div class="w-[47%] grow min-w-[10rem]">
                             <label for="firstname" >First Name : </label><br>
                             <input name="fname" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none " placeholder="{{user_info.0}}" type="text">
                         </div>
                         <div class="w-[47%] grow min-w-[10rem]">
                             <label for="lastname" >Last Name : </label><br>
-                            <input placeholder="{{user_info.1}}" name="lname" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                            <input placeholder="{{user_info.1}}" name="lname" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
                         </div>
-                    </div> -->
-                
+                    </div>
+
                     <label  for="Username" class="mt-[1rem]">Username : </label>
-                    <input placeholder="{{user_info.3}}" name="username" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                    <input placeholder="{{user_info.3}}" name="username" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
                     
                     <label for="Email" class="mt-[1rem]">Email Address : </label>
-                    <input placeholder="{{user_info.2}}" name="email" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="email">
+                    <input placeholder="{{user_info.2}}" name="email" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="email">
 
                     <label for="number" class="mt-[1rem]">Phone : </label>
-                    <input placeholder="{{user_info.4}}" name="phone" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="number">
+                    <input placeholder="{{user_info.4}}" name="phone" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="number">
 
                     <label  for="address"class="mt-[1rem]">Address : </label>
-                    <input placeholder="{{user_info.5}}" id="address" name="address" class="bg-grey border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
+                    <input placeholder="{{user_info.5}}" id="address" name="address" class="bg-grey placeholder-black border-none rounded-[7px] h-[2.5rem] w-[100%] box-border pl-[10px] mt-[0.5rem] text-black focus:outline-none" type="text">
 
                     <label  for="profileimage"class="mt-[1rem]">New Profile Image : </label>
-                    <input type="file" name="profileimage" class="bg-grey border-none rounded-[7px]  w-[100%] box-border p-[5px] mt-[0.5rem] text-black focus:outline-none">
+                    <input type="file" name="profileimage" class="bg-grey placeholder-black border-none rounded-[7px]  w-[100%] box-border p-[5px] mt-[0.5rem] text-black focus:outline-none">
 
                     <br><button id="button" class="save_changes_button" type="submit"><b>Save</b></button>
                 </form>
