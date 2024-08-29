@@ -790,7 +790,7 @@ def get_item_and_user_details_for_profilepage(request):
                
           current_item_details_list=[]
           
-          sold_item_details_list=[]
+          
           
           for item in item_objects_main:
                item_details=[]
@@ -823,10 +823,14 @@ def get_item_and_user_details_for_profilepage(request):
                     data =[hours , minutes , seconds]
                     items.append(data)
                     
+          
+          
+          sold_item_details_list=[]
+                    
           for item in item_objects_main:
                item_details=[]
                item_id=item.item_id
-               if((item.item_expiry_date < timezone.now() and (item.item_starting_price != item.item_final_price))):
+               if((item.item_expiry_date < timezone.now()) and (item.item_starting_price != item.item_final_price) and (item.item_buyer_id != None)):
                     item_details.append(item_id)
                     image_objects=Images.objects.filter(item_id=item_id)
                     for image in image_objects:
@@ -837,6 +841,8 @@ def get_item_and_user_details_for_profilepage(request):
                     item_details.append(item.item_expiry_date.strftime('%Y-%m-%d'))
                     sold_item_details_list.append(item_details)
           
+          
+          
           bought_item_details_list=[]
           
           item_objects_main_buy = Items.objects.filter(item_buyer_id=user_id)
@@ -844,7 +850,7 @@ def get_item_and_user_details_for_profilepage(request):
           for item in item_objects_main_buy:
                item_details=[]
                item_id=item.item_id
-               if((item.item_expiry_date < timezone.now()) and (item.item_starting_price != item.item_final_price)):
+               if((item.item_expiry_date < timezone.now()) and (item.item_starting_price != item.item_final_price) and (item.item_buyer_id != None)):
                     item_details.append(item_id)
                     image_objects=Images.objects.filter(item_id=item_id)
                     for image in image_objects:
@@ -854,8 +860,18 @@ def get_item_and_user_details_for_profilepage(request):
                     item_details.append(item.item_final_price)
                     item_details.append(item.item_expiry_date.strftime('%Y-%m-%d'))
                     bought_item_details_list.append(item_details)
+                    
+          
           
           combined_list=[user_details_list, current_item_details_list, sold_item_details_list,bought_item_details_list]
+          
+          combined_list.append(len(current_item_details_list))
+          
+          combined_list.append(len(bought_item_details_list))
+          
+          combined_list.append(len(sold_item_details_list))
+          
+          print(combined_list)
           
           return {'data4':combined_list}
  

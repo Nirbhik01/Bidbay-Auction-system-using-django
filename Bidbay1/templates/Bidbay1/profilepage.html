@@ -139,13 +139,13 @@
            
         </div>
         <div class="w-[43.15%] min-w-[16rem]">
-        {%if item_details.data4.1 %}
-            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings:</p>
+        {%if item_details.data4.1%}
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings: {{item_details.data4.4}}</p>
         {%else%}
             <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">No Items Listed</p>
         {%endif%}
             <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
-
+            
                 {%for items in item_details.data4.1 %}
                     {%if items.6 == 'Normal'%}
                         <form action="{%url 'Bidbay1:Bidbay_itemdetails'%}" method="POST" enctype="multipart/form-data">
@@ -193,12 +193,11 @@
 
                     {%endif%}
                 {%endfor%}
+            
             </div>
             
-            
-
             {%if item_details.data4.3%}
-                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products:</p>
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products: {{item_details.data4.5}}</p>
                 <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
                     {%for items in item_details.data4.3 %}
@@ -217,8 +216,8 @@
                     {%endfor%}  
                 </div>
             {%endif%}
-            {%if item_details.data4.2%}
-                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products:</p>
+            {%if item_details.data4.2 %}
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products: {{item_details.data4.6}} </p>
                 <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
                     {%for items in item_details.data4.2 %}
