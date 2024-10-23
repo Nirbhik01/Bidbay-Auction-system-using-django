@@ -855,10 +855,6 @@ select {
   margin: auto;
 }
 
-.m-\[50\%\] {
-  margin: 50%;
-}
-
 .mx-\[\.5rem\] {
   margin-left: .5rem;
   margin-right: .5rem;
@@ -985,10 +981,6 @@ select {
   margin-top: rem;
 }
 
-.mt-\[50\%\] {
-  margin-top: 50%;
-}
-
 .box-border {
   box-sizing: border-box;
 }
@@ -1037,8 +1029,8 @@ select {
   height: 2.5rem;
 }
 
-.h-\[20\%\] {
-  height: 20%;
+.h-\[22\%\] {
+  height: 22%;
 }
 
 .h-\[2rem\] {
@@ -1071,22 +1063,6 @@ select {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[\] {
-  height: ;
-}
-
-.h-\[\%\] {
-  height: %;
-}
-
-.h-\[25\%\] {
-  height: 25%;
-}
-
-.h-\[22\%\] {
-  height: 22%;
 }
 
 .max-h-\[12rem\] {
