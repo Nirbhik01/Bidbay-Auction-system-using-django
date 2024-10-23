@@ -12,7 +12,7 @@
 <body class="bg-blue tracking-[.02em]">
 
     {%load static%}
-    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-20 justify-between">
+    <div class="flex flex-wrap fixed items-center bg-white  w-[100vw] min-w-[20rem] py-[.5rem] box-border  px-[2rem] z-40 justify-between">
         <div class="flex w-[20rem] h-[100%]  justify-between items-center">
 
             <div class="hover:scale-[1.07] w-[30%] hover:transition-[2000ms] ">
@@ -51,9 +51,22 @@
     </div>
 
     <br>
+    <div class="hidden absolute items-center justify-center w-[100%] h-[100%] z-10" id="delete_confirmation">
+        <div class="absolute opacity-[0.2] mt-[2.5rem] w-[100%] h-[100%] bg-black z-10" ></div>
+        <div class= "p-[1rem] mt-[4rem] opacity-[2.0] brightness-[2] w-[20%] bg-blue h-[22%] rounded-[5px] text-black z-20">
+            <div class="flex flex-col items-center bg-grey-dark justiify-center z-30">
+                <p  class="text-2xl font-semibold text-black text-opacity-90">Deleting Profile </p>
+                <p class="text-[16px] mt-[1rem] font-semibold text-black text-opacity-90">Are You Sure?</p>
+                <form method="POST" action="{%url 'Bidbay1:delete_profile'%}" class="flex mt-[1rem] w-[50%] justify-between" id="delete_profile_form">
+                    {%csrf_token%}
+                    <button type="submit" id="yes_button" class="font-semibold bg-grey-dark">Yes</button>
+                    <button type="button" id="no_button" class="font-semibold bg-grey-dark">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <!-- nav bar ends -->
-    <div id="profiledetails " class="flex mt-[2rem] pl-[2rem] py-[2rem] w-[100%] divide-x-2">
+    <div id="profiledetails" class="flex mt-[2rem] pl-[2rem] py-[2rem] w-[100%] divide-x-2 z-10">
         <div id="userpicanddetails" class="w-[30%] pr-[2rem] min-w-[20rem]">
             <div class="flex">
                 <img src="{{item_details.data4.0.0}}" alt=""
@@ -126,10 +139,13 @@
            
         </div>
         <div class="w-[43.15%] min-w-[16rem]">
-
-            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings:</p>
+        {%if item_details.data4.1%}
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings: {{item_details.data4.4}}</p>
+        {%else%}
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">No Items Listed</p>
+        {%endif%}
             <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
-
+            
                 {%for items in item_details.data4.1 %}
                     {%if items.6 == 'Normal'%}
                         <form action="{%url 'Bidbay1:Bidbay_itemdetails'%}" method="POST" enctype="multipart/form-data">
@@ -177,10 +193,11 @@
 
                     {%endif%}
                 {%endfor%}
+            
             </div>
-
+            
             {%if item_details.data4.3%}
-                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products:</p>
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products: {{item_details.data4.5}}</p>
                 <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
                     {%for items in item_details.data4.3 %}
@@ -199,8 +216,8 @@
                     {%endfor%}  
                 </div>
             {%endif%}
-            {%if item_details.data4.2%}
-                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products:</p>
+            {%if item_details.data4.2 %}
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products: {{item_details.data4.6}} </p>
                 <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
                     {%for items in item_details.data4.2 %}
@@ -228,21 +245,19 @@
                     {%csrf_token%}
                     <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Edit Profile Info</button>
                 </form>
-
                 <form action="{%url 'Bidbay1:Bidbay_deleteitems'%}" method="POST">
                     {%csrf_token%}
                     <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Delete Items</button>
                 </form>
-                <form action="{%url 'Bidbay1:delete_profile'%}" method="POST">
+                <form action="{%url 'Bidbay1:delete_profile'%}" method="POST" id='delete_profile'>
                     {%csrf_token%}
-                    <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Delete Profile</button>
+                    <button class="block p-[.5rem] w-[100%] text-start" id="delete_profile_button" type="button" >Delete Profile</button>
                 </form>
                 <form action="{%url 'Bidbay1:logout_functionality'%}" method="POST">
                     {%csrf_token%}
                     <button class="block p-[.5rem] w-[100%] text-start" type="submit" >Logout</button>
                 </form>
 
-                
             </div>
     
         </div>
@@ -250,55 +265,71 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function updateTimer() {
-                const hoursElements = document.querySelectorAll("#countdown11");
-                const minutesElements = document.querySelectorAll("#countdown12");
-                const secondsElements = document.querySelectorAll("#countdown13");
 
-                const hourfields = document.querySelectorAll("#countdown1");
-                const minutefields = document.querySelectorAll("#countdown2");
-                const secondfields = document.querySelectorAll("#countdown3");
+        const form = document.getElementById('delete_profile');
 
-                // Loop through the elements and update their text content
-                for (let i = 0; i < hoursElements.length; i++) {
-                    let hours = parseInt(hoursElements[i].value);
-                    let minutes = parseInt(minutesElements[i].value);
-                    let seconds = parseInt(secondsElements[i].value);
+        const delete_profile_button = document.getElementById('delete_profile_button');
+        delete_profile_button.addEventListener('click', function(event) {
+            const delete_profile_confirmation=document.getElementById('delete_confirmation');
+            delete_profile_confirmation.style.display = 'flex';
+            document.body.style.overflow='hidden';
+        });
 
-                    console.log(hours, minutes, seconds)
+        const no_button = document.getElementById('no_button');
+        no_button.addEventListener('click', function(event) {
+            const delete_profile_confirmation=document.getElementById('delete_confirmation');
+            delete_profile_confirmation.style.display = 'none';
+            document.body.style.overflow='auto';
+        });
+        
 
-                    if (seconds > 0) {
-                        seconds--;
+
+        function updateTimer() {
+            const hoursElements = document.querySelectorAll("#countdown11");
+            const minutesElements = document.querySelectorAll("#countdown12");
+            const secondsElements = document.querySelectorAll("#countdown13");
+
+            const hourfields = document.querySelectorAll("#countdown1");
+            const minutefields = document.querySelectorAll("#countdown2");
+            const secondfields = document.querySelectorAll("#countdown3");
+
+            // Loop through the elements and update their text content
+            for (let i = 0; i < hoursElements.length; i++) {
+                let hours = parseInt(hoursElements[i].value);
+                let minutes = parseInt(minutesElements[i].value);
+                let seconds = parseInt(secondsElements[i].value);
+
+
+                if (seconds > 0) {
+                    seconds--;
+                } else {
+                    if (minutes > 0) {
+                        minutes--;
+                        seconds = 59;
                     } else {
-                        if (minutes > 0) {
-                            minutes--;
+                        if (hours > 0) {
+                            hours--;
+                            minutes = 59;
                             seconds = 59;
                         } else {
-                            if (hours > 0) {
-                                hours--;
-                                minutes = 59;
-                                seconds = 59;
-                            } else {
-                                // Timer has reached zero, you can handle this case as needed
-                            }
+                            // Timer has reached zero, you can handle this case as needed
                         }
                     }
-
-                    hoursElements[i].value = (hours < 10 ? '0' : '') + hours;
-                    minutesElements[i].value = (minutes < 10 ? '0' : '') + minutes;
-                    secondsElements[i].value = (seconds < 10 ? '0' : '') + seconds;
-
-                    hourfields[i].innerHTML= hoursElements[i].value;
-                    minutefields[i].innerHTML = minutesElements[i].value;
-                    secondfields[i].innerHTML = secondsElements[i].value;
-
                 }
+
+                hoursElements[i].value = (hours < 10 ? '0' : '') + hours;
+                minutesElements[i].value = (minutes < 10 ? '0' : '') + minutes;
+                secondsElements[i].value = (seconds < 10 ? '0' : '') + seconds;
+
+                hourfields[i].innerHTML= hoursElements[i].value;
+                minutefields[i].innerHTML = minutesElements[i].value;
+                secondfields[i].innerHTML = secondsElements[i].value;
+
             }
+        }
 
-            setInterval(updateTimer, 1000); 
-        }); 
-
+        setInterval(updateTimer, 1000); 
+    
     </script>
 
 </body>

@@ -34,15 +34,16 @@ item_category=['Shoes','Cars','Watches','Bikes','Cycles','Furnitures','Books','A
 def Bidbay_login(request):
      global page_state_variable
      page_state_variable=1  
-     data={'arg1':'0'}   
+     data=request.session.get('login_data')
      return render(request, 'Bidbay1/loginpage.html',data)
 
 def Bidbay_register(request):
      global page_state_variable
      page_state_variable=2
+     data=request.session.get('prevent_event_action')
      # Room.objects.all().delete()
      # reset_user_id_sequence()
-     return render(request, 'Bidbay1/Registerpage.html')
+     return render(request, 'Bidbay1/Registerpage.html',{"data":data})
 
 def Bidbay_editprofileinfo(request):
      global page_state_variable
@@ -215,15 +216,17 @@ def login_user_authentication(request):
      request.session["userindicator"] = username
      username_list=list(Userdetails.objects.values_list('user_name',flat=True))
      check_username = username in username_list
-     
+     request.session["login_data"]={'arg1':'0'}
      if not check_username:
-          data={"arg1":'2'}
-          return render(request, 'Bidbay1/loginpage.html', data)
+          request.session["login_data"]={'arg1':'2'}
+          return redirect('Bidbay1:Bidbay_login')
+     
      elif match_entered_pw_with_pw_in_db(request, username,password):
+          request.session["login_data"]={'arg1':'0'}
           return redirect("Bidbay1:Bidbay_home")
      else:
-          data={'arg1':'1'}
-          return render(request,"Bidbay1/loginpage.html",data)
+          request.session["login_data"]={'arg1':'1'}
+          return redirect("Bidbay1:Bidbay_login")
 
 def delete_profile(request):
      if request.method=="POST":
@@ -386,6 +389,8 @@ def filtering_functionality(request):
 def save_changes_to_profile_details(request):
      
      if request.method=='POST':
+          new_fname = request.POST.get("fname")
+          new_lname = request.POST.get("lname")
           new_user_name=request.POST.get('username')
           new_email_address=request.POST.get('email')
           new_phone_number=request.POST.get('phone')
@@ -395,6 +400,12 @@ def save_changes_to_profile_details(request):
                new_user_profile_image = request.FILES["profileimage"]
           except:
                new_user_profile_image=None
+          
+          if new_fname =="":
+               new_fname=None
+               
+          if new_lname =="":
+               new_lname=None
           
           if new_user_name =="":
                new_user_name=None
@@ -410,6 +421,14 @@ def save_changes_to_profile_details(request):
                     
           user= Userdetails.objects.get(user_name=request.session.get('userindicator'))
           
+          if new_fname:
+               user.user_fname=new_fname
+               user.save()
+               
+          if new_lname:
+               user.user_lname=new_lname 
+               user.save()
+               
           if new_user_name:
                request.session['userindicator']= new_user_name
                user.user_name=new_user_name 
@@ -435,7 +454,6 @@ def save_changes_to_profile_details(request):
 
 def place_bid(request):
     
-
      item_id=request.POST.get('item_id')
      
      bid_amount=int(request.POST.get('bid_amount'))
@@ -508,7 +526,6 @@ def place_bid(request):
 def match_entered_pw_with_pw_in_db(request, username,password):
      entered_password=password
      db_password=fetch_pw_and_decrypt(username)
-     
      if entered_password==db_password:
           return True
      else:
@@ -578,12 +595,10 @@ def get_item_detail_for_deleting(request):
                current_item_details_list.append(item_details)
                
      for items in current_item_details_list:
+          
           if(items[6] == 'live' ):
-               
                live_item=Items.objects.get(item_id=items[0])
-               
                time_remaining=live_item.item_expiry_date - timezone.now()
-               
                hours = time_remaining.seconds // 3600
                minutes = (time_remaining.seconds % 3600) // 60
                seconds = time_remaining.seconds % 60
@@ -775,7 +790,7 @@ def get_item_and_user_details_for_profilepage(request):
                
           current_item_details_list=[]
           
-          sold_item_details_list=[]
+          
           
           for item in item_objects_main:
                item_details=[]
@@ -808,10 +823,14 @@ def get_item_and_user_details_for_profilepage(request):
                     data =[hours , minutes , seconds]
                     items.append(data)
                     
+          
+          
+          sold_item_details_list=[]
+                    
           for item in item_objects_main:
                item_details=[]
                item_id=item.item_id
-               if((item.item_expiry_date < timezone.now() and (item.item_starting_price != item.item_final_price))):
+               if((item.item_expiry_date < timezone.now()) and (item.item_starting_price != item.item_final_price) and (item.item_buyer_id != None)):
                     item_details.append(item_id)
                     image_objects=Images.objects.filter(item_id=item_id)
                     for image in image_objects:
@@ -822,6 +841,8 @@ def get_item_and_user_details_for_profilepage(request):
                     item_details.append(item.item_expiry_date.strftime('%Y-%m-%d'))
                     sold_item_details_list.append(item_details)
           
+          
+          
           bought_item_details_list=[]
           
           item_objects_main_buy = Items.objects.filter(item_buyer_id=user_id)
@@ -829,7 +850,7 @@ def get_item_and_user_details_for_profilepage(request):
           for item in item_objects_main_buy:
                item_details=[]
                item_id=item.item_id
-               if((item.item_expiry_date < timezone.now()) and (item.item_starting_price != item.item_final_price)):
+               if((item.item_expiry_date < timezone.now()) and (item.item_starting_price != item.item_final_price) and (item.item_buyer_id != None)):
                     item_details.append(item_id)
                     image_objects=Images.objects.filter(item_id=item_id)
                     for image in image_objects:
@@ -839,8 +860,18 @@ def get_item_and_user_details_for_profilepage(request):
                     item_details.append(item.item_final_price)
                     item_details.append(item.item_expiry_date.strftime('%Y-%m-%d'))
                     bought_item_details_list.append(item_details)
+                    
+          
           
           combined_list=[user_details_list, current_item_details_list, sold_item_details_list,bought_item_details_list]
+          
+          combined_list.append(len(current_item_details_list))
+          
+          combined_list.append(len(bought_item_details_list))
+          
+          combined_list.append(len(sold_item_details_list))
+          
+          print(combined_list)
           
           return {'data4':combined_list}
  
@@ -849,23 +880,29 @@ def get_item_and_user_details_for_profilepage(request):
     
 def store_username_and_encryptedpwd(request):
      if request.method=='POST':
-        name=request.POST.get("username")
-        fname=request.POST.get("fname")
-        lname=request.POST.get("lname")
-        email=request.POST.get("email")
-        password=request.POST.get("password")
-        birthdate=request.POST.get("DOB")
-        phone=request.POST.get("phone")
-        address=request.POST.get("address")
-        date_joined = date.today()
-        profile_image = request.FILES["image"]
-        a=read_pw_and_encrypt(password).decode()
-        save_details=Userdetails(user_name=name,user_fname=fname,user_lname=lname,
-                                 user_email=email,user_pwd=a,user_DOB=birthdate,
-                                 user_phone=phone,
-                                 user_address=address,user_date_joined=date_joined,user_profile_image=profile_image)
-        save_details.save()
-        return redirect ("Bidbay1:Bidbay_login")
+          name=request.POST.get("username")
+          fname=request.POST.get("fname")
+          lname=request.POST.get("lname")
+          email=request.POST.get("email")
+          password=request.POST.get("password")
+          birthdate=request.POST.get("DOB")
+          phone=request.POST.get("phone")
+          address=request.POST.get("address")
+          date_joined = date.today()
+          profile_image = request.FILES["image"]
+          a=read_pw_and_encrypt(password).decode()
+          request.session['prevent_event_action']='0'
+          if Userdetails.objects.filter(user_name=name).exists():
+               request.session['prevent_event_action']='1'
+               return redirect("Bidbay1:Bidbay_register")
+          else:
+               save_details=Userdetails(user_name=name,user_fname=fname,user_lname=lname,
+                                        user_email=email,user_pwd=a,user_DOB=birthdate,
+                                        user_phone=phone,
+                                        user_address=address,user_date_joined=date_joined,user_profile_image=profile_image)
+               save_details.save()
+               request.session['prevent_event_action']='0'
+               return redirect ("Bidbay1:Bidbay_login")
         
 
 def read_pw_and_encrypt(password):

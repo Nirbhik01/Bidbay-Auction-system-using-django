@@ -65,57 +65,59 @@
             </div>
            
         </div>
-        <div id="products" class="flex my-[2rem] rounded-[15px] ">
-            <div class="flex flex-wrap bg-blue-dark p-[2rem] rounded-[15px]">
-                {%for items in item_details %}
-                    {%if items.6 == 'Normal'%}
-                            <div class="relative flex ml-[.5rem] cursor-pointer">
-                                <input type="checkbox" name="normal_checkbox_{{items.0}}" class="rounded-[3px]" id="normal_checkbox_{{ forloop.counter }}">
-                                <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
-                                <div id="item1" onclick="document.getElementById('normal_checkbox_{{ forloop.counter }}').click();"
-                                    class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem]  border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] " >
-                                    <img src="{{items.1}}" alt=""
-                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
-                                    <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
-                                    <p id="item_time_left" class="text-[12px]">{{items.3}} days {{items.5}}hr</p>
-                                    <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
-                                </div>
-                            </div>
-                       
-                    {%else%}
-                            <div class="relative flex ml-[.5rem] cursor-pointer">
-                                <input type="checkbox" name="live_checkbox_{{items.0}}" class="rounded-[3px]" id="live_checkbox_{{ forloop.counter }}" value="{{items.0}}">
-                                <input type="text" name="live_item_id" class="hidden" value="{{items.0}}">
-                                <div id="item3" onclick="document.getElementById('live_checkbox_{{ forloop.counter }}').click();"
-                                    class="bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] " >
-                                    
-                                    <img src="{{items.1}}" alt=""
+        {%if item_details%}
+            <div id="products" class="flex my-[2rem] rounded-[15px] ">
+                <div class="flex flex-wrap bg-blue-dark p-[2rem] rounded-[15px]">
+                    {%for items in item_details %}
+                        {%if items.6 == 'Normal'%}
+                                <div class="relative flex ml-[.5rem] cursor-pointer">
+                                    <input type="checkbox" name="normal_checkbox_{{items.0}}" class="rounded-[3px]" id="normal_checkbox_{{ forloop.counter }}">
+                                    <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                                    <div id="item1" onclick="document.getElementById('normal_checkbox_{{ forloop.counter }}').click();"
+                                        class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem]  border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] " >
+                                        <img src="{{items.1}}" alt=""
                                         class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
-                                    <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
-                                    
-                                    <div id="countdown" class="flex text-[12px]">
-                                        <input type="hidden" value="{{items.7.0}}" id="countdown11">
-                                        <p id="countdown1">
-                                            {{ items.7.0 | stringformat:"02d" }}
-                                        </p> 
-                                        : 
-                                        <input type="hidden" value="{{items.7.1}}" id="countdown12">
-                                        <p id="countdown2">
-                                            {{ items.7.1 | stringformat:"02d" }} 
-                                        </p>
-                                        : 
-                                        <input type="hidden" id="countdown13" value="{{items.7.2}}"> 
-                                        <p id="countdown3"> 
-                                            {{ items.7.2 | stringformat:"02d" }}
-                                        </p>
+                                        <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                        <p id="item_time_left" class="text-[12px]">{{items.3}} days {{items.5}}hr</p>
+                                        <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
                                     </div>
-                                    <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
                                 </div>
-                            </div>
-                    {%endif%}
-                {%endfor%}
+                        
+                        {%else%}
+                                <div class="relative flex ml-[.5rem] cursor-pointer">
+                                    <input type="checkbox" name="live_checkbox_{{items.0}}" class="rounded-[3px]" id="live_checkbox_{{ forloop.counter }}" value="{{items.0}}">
+                                    <input type="text" name="live_item_id" class="hidden" value="{{items.0}}">
+                                    <div id="item3" onclick="document.getElementById('live_checkbox_{{ forloop.counter }}').click();"
+                                        class="bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] " >
+                                        
+                                        <img src="{{items.1}}" alt=""
+                                            class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                        <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                        
+                                        <div id="countdown" class="flex text-[12px]">
+                                            <input type="hidden" value="{{items.7.0}}" id="countdown11">
+                                            <p id="countdown1">
+                                                {{ items.7.0 | stringformat:"02d" }}
+                                            </p> 
+                                            : 
+                                            <input type="hidden" value="{{items.7.1}}" id="countdown12">
+                                            <p id="countdown2">
+                                                {{ items.7.1 | stringformat:"02d" }} 
+                                            </p>
+                                            : 
+                                            <input type="hidden" id="countdown13" value="{{items.7.2}}"> 
+                                            <p id="countdown3"> 
+                                                {{ items.7.2 | stringformat:"02d" }}
+                                            </p>
+                                        </div>
+                                        <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                                    </div>
+                                </div>
+                        {%endif%}
+                    {%endfor%}
+                </div>
             </div>
-        </div>
+        {%endif%}
     </form>
 
     <script>

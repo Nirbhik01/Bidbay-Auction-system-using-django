@@ -827,6 +827,14 @@ select {
   z-index: 20;
 }
 
+.z-30 {
+  z-index: 30;
+}
+
+.z-40 {
+  z-index: 40;
+}
+
 .z-\[0\] {
   z-index: 0;
 }
@@ -1021,16 +1029,20 @@ select {
   height: 2.5rem;
 }
 
+.h-\[22\%\] {
+  height: 22%;
+}
+
 .h-\[2rem\] {
   height: 2rem;
 }
 
-.h-\[30rem\] {
-  height: 30rem;
-}
-
 .h-\[3rem\] {
   height: 3rem;
+}
+
+.h-\[40rem\] {
+  height: 40rem;
 }
 
 .h-\[6rem\] {
@@ -1051,14 +1063,6 @@ select {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[35rem\] {
-  height: 35rem;
-}
-
-.h-\[40rem\] {
-  height: 40rem;
 }
 
 .max-h-\[12rem\] {
@@ -1470,6 +1474,11 @@ select {
   background-color: rgb(217 217 217 / var(--tw-bg-opacity));
 }
 
+.bg-grey-dark {
+  --tw-bg-opacity: 1;
+  background-color: rgb(131 131 131 / var(--tw-bg-opacity));
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -1773,6 +1782,10 @@ select {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-opacity-90 {
+  --tw-text-opacity: 0.9;
+}
+
 .placeholder-black::-moz-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgb(0 0 0 / var(--tw-placeholder-opacity));
@@ -1795,6 +1808,19 @@ select {
 
 .opacity-0 {
   opacity: 0;
+}
+
+.opacity-\[0\.2\] {
+  opacity: 0.2;
+}
+
+.opacity-\[2\.0\] {
+  opacity: 2.0;
+}
+
+.brightness-\[2\] {
+  --tw-brightness: brightness(2);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .duration-\[1s\] {

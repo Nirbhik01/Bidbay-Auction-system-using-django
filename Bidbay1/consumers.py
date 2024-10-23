@@ -38,7 +38,7 @@ class Bidbay1Consumer(AsyncWebsocketConsumer):
         get_item=Items.objects.get(item_id=data["room_name"])
         get_room = Room.objects.get(room_name=get_item)
         get_sender = Userdetails.objects.get(user_name=data['sender'])
-        if not Message.objects.filter(message=data['message'],sender=get_sender).exists():
+        if not ((Message.objects.filter(message=data['message'],sender=get_sender).exists()) or (data['message']=="")):
             new_message = Message(room_name=get_room,sender=get_sender,message=data['message'])
             new_message.save()
             

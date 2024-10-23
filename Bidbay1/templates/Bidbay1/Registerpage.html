@@ -56,6 +56,10 @@
                     
                     <p class="text-center text-sm mt-2 text-invalid-red" id="Invalid_part"></p>
 
+                    {%if data == '1'%}
+                        <p class="text-center text-sm text-invalid-red mt-2 text-green-500">Username already exists!</p>
+                    {%endif%}
+
                     <br><button id="button" class="register_button" type="submit"><b>Register</b></button>
                 </form>
             </div>
