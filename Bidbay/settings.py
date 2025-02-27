@@ -155,3 +155,5 @@ CHANNEL_LAYERS = {
     }
 }
 
+PAYPAL_SECRET = ''
+PAYPAL_CLIENT_ID = ''
