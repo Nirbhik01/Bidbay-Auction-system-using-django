@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Auction</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {%tailwind_css%}
     <style>
         .msg-body {
@@ -116,7 +117,10 @@
                 </div>
                 <div class="w-[100%] h-[10%] mt-[1rem]">
                         <form id="msg-form" class="w-[100%] h-[100%]" action="" method="POST">
-                            <input type="number" id="message" class="w-[100%] border-none bg-grey rounded-[12px]" placeholder="Enter Amount">
+                            {%csrf_token%}
+                            <!-- {{liveauction_item_details.data1.2.2}} -->
+                            <input type="number" name='message' id="message" class="w-[100%] border-none bg-grey rounded-[12px]" placeholder="Enter Amount">
+                            <input type="hidden" name='this_item_id' value={{liveauction_item_details.data1.2.2}}>
                         </form>
                 </div>
             </div>
@@ -445,6 +449,26 @@
     }
 
     createWebSocket();
+
+    $(document).ready(function(){
+        $("#msg-form").submit(function(event){
+            event.preventDefault();  // Prevent page reload
+    
+            var formData = $(this).serialize();  // Serialize form data
+            $.ajax({
+                type: "POST",
+                url: "{% url 'Bidbay1:place_bid_for_live_auction' %}",  // Replace with your Django URL
+                data: formData,
+                success: function(response) {
+                    $("#message").html("<p style='color:green;'>Form submitted successfully!</p>");
+                },
+                error: function(xhr, status, error) {
+                    $("#message").html("<p style='color:red;'>Error submitting form.</p>");
+                }
+            });
+        });
+    });
+
     </script>
 
 </body>

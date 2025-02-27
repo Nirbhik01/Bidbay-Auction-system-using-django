@@ -11,6 +11,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from environs import Env
+
+env = Env()
+env.read_env()
+
+# PAYPAL_CLIENT_ID = env("PAYPAL_CLIENT")
+# PAYPAL_SECRET_ID  = env("PAYPAL_SECRET_ID")
+
+# STRIPE_SECRET_KEY= env("STRIPE_SECRET_KEY")
+# STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'paypal_app',
     'channels',
     'tailwind',
     'Bidbay_main',
@@ -143,3 +154,6 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+PAYPAL_CLIENT_ID = "AeGgUAPHEg7vqBQTXxHT_poo47GaxU6qtw8_FsNRIZ2lS9DGL7xBg-jgyD4rGdzFf-2EXIjwItuY_SL-"
+PAYPAL_SECRET  = "ELWl3af2k7hSvwQoxON5l-QsP6NQIkCGy9PENnLewUfQwyEe4qZ4VuOAK6c08gUCEGoQxBf4NVK6MhBq"

@@ -56,7 +56,7 @@
 
     <br>
 
-
+    
     <!-- nav bar ends here  -->
 
     <div class="flex relative w-[100%] divide-x-2 divide-solid mt-[4rem] z-10">
@@ -112,6 +112,11 @@
 
                 
             </div>
+            {% comment %} <a class="block text-center w-full mt-10 py-3 rounded-lg bg-white text-blue font-semibold hover:shadow-md hover:scale-[1.01] duration-[.2s]" href="{%url 'Bidbay1:Bidbay_payment_checkout' bought_item_detail.2.2 %}">Proceed to Payment</a> {% endcomment %}
+            <form action="{% url 'Bidbay1:create_payment' bought_item_detail.2.2 %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="bg-white text-blue text-center w-full py-3 mt-10 rounded-lg font-semibold hover:scale-[1.02] hover:sgadow-md duration-[.2s]">Pay with PayPal</button>
+            </form>
 
         </div>
 
@@ -187,6 +192,13 @@
 
         </div>
     </div>
+    {%if messages%}
+        {% for message in messages %}
+            <script>
+                alert("{{ message }}");
+            </script>
+        {%endfor%}
+    {%endif%}
 
     <script>
 

@@ -136,11 +136,12 @@
                     </div>
                 </div>
             </div>
+            
            
         </div>
         <div class="w-[43.15%] min-w-[16rem]">
         {%if item_details.data4.1%}
-            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings: {{item_details.data4.4}}</p>
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Listings: {{item_details.data4.5}}</p>
         {%else%}
             <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">No Items Listed</p>
         {%endif%}
@@ -190,20 +191,69 @@
                                 <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
                             </button>
                         </form>
-
                     {%endif%}
                 {%endfor%}
             
             </div>
-            
+            {%if item_details.data4.4%}
+            <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Current Bids: {{item_details.data4.8}}</p>
+            <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
+                {%for items in item_details.data4.4%}
+                    {%if items.6 == 'Normal'%}
+                        <form action="{%url 'Bidbay1:Bidbay_itemdetails'%}" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                            <button id="item1"
+                                class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
+                                <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                <p id="item_time_left" class="text-[12px]">{{items.3}} days {{items.5}}hr</p>
+                                <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                            </button>
+                        </form>
+
+                    {%else%}
+                        <form action="{%url 'Bidbay1:Bidbay_liveauction' room_name=items.0 user_name=item_details.data4.0.1%}" method="POST" enctype="multipart/form-data">
+                            {%csrf_token%}
+                            <input type="text" name="live_item_id" class="hidden" value="{{items.0}}">
+                            <button id="item3"
+                                class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
+                                <img src="{{items.1}}" alt=""
+                                    class="mt-[-30px] h-[85%] w-[100%] rounded-[7px] ">
+                                <p id="item_name" class="font-semibold mt-[.35rem]">{{items.2}}</p>
+                                
+                                <div id="countdown" class="flex text-[12px]">
+                                    <input type="hidden" value="{{items.7.0}}" id="countdown11">
+                                    <p id="countdown1">
+                                        {{ items.7.0 | stringformat:"02d" }}
+                                    </p> 
+                                    : 
+                                    <input type="hidden" value="{{items.7.1}}" id="countdown12">
+                                    <p id="countdown2">
+                                        {{ items.7.1 | stringformat:"02d" }} 
+                                    </p>
+                                    : 
+                                    <input type="hidden" id="countdown13" value="{{items.7.2}}"> 
+                                    <p id="countdown3"> 
+                                        {{ items.7.2 | stringformat:"02d" }}
+                                    </p>
+                                </div>
+                                <p id="current_bid" class="font-medium">Rs.{{items.4}}</p>
+                            </button>
+                        </form>
+                    {%endif%}   
+                {%endfor%}
+                    </div>
+            {%endif%}
             {%if item_details.data4.3%}
-                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products: {{item_details.data4.5}}</p>
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Bought products: {{item_details.data4.6}}</p>
                 <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
                     {%for items in item_details.data4.3 %}
                         <form action="{%url 'Bidbay1:Bidbay_boughtitemdetail'%}" method="POST" enctype="multipart/form-data">
                             {%csrf_token%}
-                            <input type="text" name="this_item_id" class="hidden" value="{{items.0}}">
+                            <input type="hidden" name="this_item_id" value={{items.0}}>
                             <button id="item1"
                                 class=" bg-[#d9d9d9] overflow-hidden text-left border-[5px] mx-[.5rem] mb-[1rem] border-[#d9d9d9] h-[17rem] w-[11rem] rounded-[15px] duration-[1s] ">
                                 <img src="{{items.1}}" alt=""
@@ -217,7 +267,7 @@
                 </div>
             {%endif%}
             {%if item_details.data4.2 %}
-                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products: {{item_details.data4.6}} </p>
+                <p class="px-[2.5rem] mb-[2rem] font-medium text-white text-3xl">Sold products: {{item_details.data4.7}} </p>
                 <div id="Userproducts" class="flex flex-wrap px-[2rem] pb-[2rem] ">
 
                     {%for items in item_details.data4.2 %}

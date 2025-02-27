@@ -11,11 +11,15 @@ urlpatterns = [
    path('uploaditempage/',Bidbay_uploaditem,name='Bidbay_uploaditem'),
    path('itemdetailspage/',Bidbay_itemdetails,name='Bidbay_itemdetails'),
    path('itemlistpage/', Bidbay_itemlist, name='Bidbay_itemlist'),
-   # path('liveauctionpage/',Bidbay_liveauction,name='Bidbay_liveauction'),
-   
+
+
+   path('create_payment/<int:item_id>/',create_payment, name='create_payment'),
+   path('execute_payment/<int:item_id>/',execute_payment, name='execute_payment'),
+   path('payment_failed/<int:item_id>',payment_failed, name='payment_failed'),
    path('liveauctionpage/<str:room_name>/<str:user_name>/',Bidbay_liveauction,name='Bidbay_liveauction'),
    path('deletingprofile',delete_profile,name='delete_profile'),
    path('profilepage/',Bidbay_profile,name='Bidbay_profile'),
+   
    path('authenticating/',login_user_authentication,name='login_user_authentication'),
    path("storingusernameandpwd",store_username_and_encryptedpwd,name="store_username_and_encryptedpwd"),
    path('storingitemdetails/',store_item_details_and_images,name='store_item_details_and_images'),
@@ -33,6 +37,7 @@ urlpatterns = [
    path('boughtitemdetail/',Bidbay_boughtitemdetail,name="Bidbay_boughtitemdetail"),
    path('deleteitems/',Bidbay_deleteitems,name="Bidbay_deleteitems"),
    path('deletingitems/',delete_items,name="delete_items"),
+   path('save_bid',place_bid_for_live_auction,name='place_bid_for_live_auction')
 ]
 
 admin.site.site_header = "Bidbay Admin Pannel"

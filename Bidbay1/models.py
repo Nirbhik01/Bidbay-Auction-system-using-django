@@ -1,5 +1,11 @@
 from django.db import models
 
+PAYMENT_STATUS = (
+    ('Paid', 'Paid'),
+    ('Not Paid', 'Not Paid'),
+    ('Processing', 'Processing')
+)
+
 class Userdetails(models.Model):
     user_id = models.BigAutoField(primary_key=True)
     user_name = models.CharField(max_length=100)
@@ -12,6 +18,7 @@ class Userdetails(models.Model):
     user_address=models.CharField(max_length=100)
     user_date_joined=models.DateField()
     user_profile_image=models.ImageField(upload_to='Bidbay1/static/Bidbay1/profile_images',null=True, blank=True)   
+    
     def __str__(self):
        return self.user_name
     
@@ -27,6 +34,7 @@ class Items(models.Model):
     item_category=models.CharField(max_length=20)
     item_expiry_date=models.DateTimeField()
     item_buyer_id=models.ForeignKey(Userdetails,null=True, blank=True,on_delete=models.SET_NULL,related_name='items_bought')
+    item_payment_status=models.CharField(max_length=100,choices=PAYMENT_STATUS,default="Processing")
     
     def __str__(self):
         return f"{self.item_id}-{self.item_name}"
@@ -54,5 +62,13 @@ class Message(models.Model):
     
     def __str__(self):
         return f"Room:-{self.room_name} , Sender:- {self.sender}"
+    
+    
+class current_bids(models.Model):
+    bid_id=models.AutoField(primary_key=True)
+    user_id=models.ForeignKey(Userdetails, on_delete=models.CASCADE,null=True,blank=True)
+    item_id=models.ForeignKey(Items, on_delete=models.CASCADE,null=True,blank=True)
+    
+
 
 # Create your models here.
