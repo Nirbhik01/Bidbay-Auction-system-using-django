@@ -46,7 +46,7 @@ paypalrestsdk.configure({
 
 
 def create_payment(request, item_id):
-     print(item_id)
+     
      item_obj= Items.objects.get(item_id=item_id)
      price ="{:.2f}".format(item_obj.item_final_price / EXCHANGE_RATE)
      payment = paypalrestsdk.Payment({
@@ -68,11 +68,10 @@ def create_payment(request, item_id):
                }
           ],
      })
-     print("header done")
+     
      if payment.create():
           return redirect(payment.links[1].href)  # Redirect to PayPal for payment
      else:
-          print("failed fter header")
           print("Payment creation failed:", payment.error)
           return redirect(reverse('Bidbay1:payment_failed',args=[item_id]))
 
@@ -261,68 +260,6 @@ def Bidbay_profile(request):
     
      return render(request, 'Bidbay1/profilepage.html',data)
 
-# def Bidbay_payment_checkout(request, item_id):
-#      order = Items.objects.get(item_id= item_id)
-#      total_in_usd = round(order.item_final_price / EXCHANGE_RATE, 2)
-#      username = request.session.get('userindicator')
-#      useremail = Userdetails.objects.get(user_name=username)
-
-#      data={
-#           'user_profile_pic': get_user_profile_pic(request)[0],
-#           'user_profile_pic_to_profilepage': get_user_profile_pic(request)[1],
-#           'userindiactor':request.session.get('userindicator'),
-#           'user_email':useremail.user_email,
-#           'item_id':item_id,
-#           'paypal_client_id':settings.PAYPAL_CLIENT_ID,
-#           'stripe_public_key':settings.STRIPE_PUBLIC_KEY,
-#           'total_in_usd': total_in_usd,
-          
-#      }
-#      return render(request, 'Bidbay1/paymentcheckoutpage.html',data)
-
-
-# def get_paypal_access_token():
-#     token_url = 'https://api.sandbox.paypal.com/v1/oauth2/token'
-#     data = {'grant_type': 'client_credentials'}
-#     auth = (settings.PAYPAL_CLIENT_ID, settings.PAYPAL_SECRET_ID)
-#     response = requests.post(token_url, data=data, auth=auth)
-
-#     if response.status_code == 200:
-#           print("got code")
-#           return response.json()['access_token']
-#     else:
-#         print(f'Failed to get access token from PayPal. Status code: {response.status_code}')
-#         raise Exception(f'Failed to get access token from PayPal. Status code: {response.status_code}')
-   
-
-# def paypal_payment_verify(request, order_id):
-#     order = Items.objects.get(item_id=order_id)
-
-#     transaction_id = request.GET.get("transaction_id")
-#     paypal_api_url = f'https://api-m.sandbox.paypal.com/v2/checkout/orders/{transaction_id}'
-#     print("before header")
-#     headers = {
-#         'Content-Type': 'application/json',
-#         'Authorization': f'Bearer {get_paypal_access_token()}',  # Assuming this function is defined to get the token
-#     }
-#     print("after header")
-#     response = requests.get(paypal_api_url, headers=headers)
-#     print(response)
-#     print(response.status_code)
-#     if response.status_code == 200:
-#         paypal_order_data = response.json()
-#         paypal_payment_status = paypal_order_data['status']
-#         payment_method = "PayPal"
-#         print(paypal_payment_status)
-#         if paypal_payment_status == 'COMPLETED':
-#             if order.item_payment_status == "Processing":
-#                 order.item_payment_status = "Paid"
-#                 order.save()
-
-#                 return redirect(f"/payment_status/{order.item_id}/?payment_status=paid")
-
-# #   return redirect(f"Bidbay1/boughtitemdetail/{order.item_id}/?payment_status=failed")
-#     return redirect("/Bidbay1/boughtitemdetail/")
 
 def logout_functionality(request):
      if request.method =="POST":
@@ -585,10 +522,10 @@ def save_changes_to_profile_details(request):
 def place_bid_for_live_auction(request):
      if request.method == "POST":
           item_id = request.POST.get("this_item_id")
-          print(item_id)
+          
           item = Items.objects.get(item_id=item_id)
           user = Userdetails.objects.get(user_name=request.session.get("userindicator")) 
-          print(f'{item}\n{user}')
+          
           save_bid=current_bids(user_id=user,item_id=item)
           save_bid.save()
 
@@ -786,13 +723,10 @@ def get_detail_for_bought_item(request):
      selected_item_id = None
      
      if x == None:
-          print("entered x is none")
           selected_item_id = request.POST.get("this_item_id") 
-     
      else:
-          print("entered x is full")
+          
           selected_item_id=request.session.get('item_id_for_bought_item')
-     print(selected_item_id)
      
      item_details=Items.objects.get(item_id=selected_item_id) 
      
@@ -969,9 +903,9 @@ def get_item_and_user_details_for_profilepage(request):
                     current_bids_list.append(item_details)
           
           for items in current_bids_list:
-               print('entered inside current bids list')
+               
                if(items[6] == 'live' ):
-                    print('entered inside live of  current bids list')
+                    
                     live_item=Items.objects.get(item_id=items[0])
                     time_remaining=live_item.item_expiry_date - timezone.now()
                     hours = time_remaining.seconds // 3600
@@ -1064,7 +998,7 @@ def get_item_and_user_details_for_profilepage(request):
           
           combined_list.append(len(current_bids_list))
           
-          print(bought_item_details_list)
+          
           
           return {'data4':combined_list}
  
